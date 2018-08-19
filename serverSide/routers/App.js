@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const drugRouter = require('../api/routers/drugs');
 
 app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 app.use('/drugs', drugRouter);
 
@@ -13,6 +16,7 @@ app.use((req, res, next) => {
     error.status= 404;
     next(error);
 });
+
 app.use('/drugs', drugRouter);
 
 app.use((error, req, res, next) => {
