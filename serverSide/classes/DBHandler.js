@@ -3,13 +3,8 @@ const Promise = require('promise');
 
 module.exports = class DBHandler {
 
-    constructor() {
-        this.con = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "AbadiPharm"
-        });
+    constructor(con) {
+        this.con = con;
     }
 
     isResultEmpty(result) {

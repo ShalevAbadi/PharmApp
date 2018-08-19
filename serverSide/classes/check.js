@@ -1,9 +1,19 @@
+const mysql = require('mysql');
+const con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "AbadiPharm"
+});
+
 var db = require('./DBHandler');
-var dataBase = new db();
+var dataBase = new db(con);
 
 var DH = require('./DrugsHandler');
 var UDH = require('./UserDrugsHandler');
 var UH = require('./UserHandler');
+
+
 var userHandler = new UH(dataBase);
 var drugHandler = new DH(dataBase);
 var userDrugsHandler = new UDH(dataBase);

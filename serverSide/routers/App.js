@@ -2,6 +2,14 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mysql = require('mysql');
+
+const con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "AbadiPharm"
+});
 
 const drugRouter = require('../api/routers/drugs');
 
