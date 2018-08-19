@@ -12,8 +12,13 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const drug = {
+        name: req.body.name,
+        daysAfterOpened: req.body.price
+    }
     res.status(200).json({
-        message: 'Handling POST requests to /drugs'
+        message: 'Handling POST requests to /drugs',
+        createdDrug: drug
     });
 });
 
