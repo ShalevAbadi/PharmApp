@@ -33,4 +33,9 @@ module.exports = class DrugHandler {
         let sql = "SELECT * FROM Drugs WHERE DrugName='" + name + "'";
         return this.db.runSQL(sql).then(console.log.bind(console));;
     }
+
+    getDrugById(id) {
+        let sql = "SELECT * FROM Drugs WHERE DrugId='" + id + "'";
+        return this.db.runSQL(sql).then(console.log.bind(console));;
+    }
 };
