@@ -10,7 +10,7 @@ module.exports = class DrugHandler {
         return this.getDrugByName(drug.getName()).then(
             (result) => {
                 if (!this.db.isResultEmpty(result)) {
-                     return 'drug already exist';
+                    return 'drug already exist';
                 } else {
                     this.createDrug(drug.getName(), drug.getDaysAfterOpened).then((result) => {
                         let msg = result ? 'Drug created' : 'db error occured2';
@@ -38,6 +38,15 @@ module.exports = class DrugHandler {
 
     getDrugById(id) {
         let sql = "SELECT * FROM Drugs WHERE DrugId='" + id + "'";
-        return this.db.runSQL(sql);
+        return this.db.runSQL(sql).then((result) => {
+            if (this.db.isResultEmpty(result)) {
+                 return 'drug not found';
+            } else {
+               return JSON.stringify(result[0]);
+            }
+        },
+        (err) => {
+            return (err);
+        });
     }
 };

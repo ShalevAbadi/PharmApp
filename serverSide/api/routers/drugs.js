@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const drugsHandlerReq =  require('../../classes/DrugsHandler');
+const drugsHandlerReq = require('../../classes/DrugsHandler');
 const drugsHandler = new drugsHandlerReq();
 
 router.get('/', (req, res, next) => {
@@ -11,10 +11,6 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const drug = {
-        name: req.body.name,
-        daysAfterOpened: req.body.price
-    }
     res.status(200).json({
         message: 'Handling POST requests to /drugs',
         createdDrug: drug
@@ -34,17 +30,24 @@ router.delete('/:drugId', (req, res, next) => {
 });
 
 router.post('/:drugId', (req, res, next) => {
-    const id = req.params.drugId;
+    let id = req.params.drugId;
     if (id === 'special') {
         res.status(200).json({
             massage: 'You discovered the special ID',
             id: id
         });
     } else {
-        res.status(200).json({
-            massage: 'You passed an id',
-            id: id
-        });
+        drugsHandler.getDrugById(id).then((result) => {
+
+            /*if (drugsHandler.db.isResultEmpty(result)) {
+                    return this.res.status(200).json("res: drug not found");
+                } else {*/
+            return this.res.status(200).json(result[0]);
+            //}
+        },
+            (err) => {
+                return (err);
+            });
     }
 
 });
