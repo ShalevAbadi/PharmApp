@@ -2,20 +2,11 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
-
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "AbadiPharm"
-});
-
-const drugRouter = require('../api/routers/drugs');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+const drugRouter = require('../api/routers/drugs');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

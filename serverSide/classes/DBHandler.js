@@ -1,26 +1,21 @@
-const mysql = require('mysql');
 const Promise = require('promise');
+const dbCon = require('./dbConnection');
 
-module.exports = class DBHandler {
 
-    constructor(con) {
-        this.con = con;
-    }
-
-    isResultEmpty(result) {
-        return (typeof result == 'undifined' || result.length < 1 || result === null);
-    }
-
-    runSQL(sql) {
-        return new Promise((resolve, reject) => {
-            this.con.query(sql, function (err, result) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-    }
-
+function isResultEmpty(result) {
+    return (typeof result == 'undifined' || result.length < 1 || result === null);
 };
+
+function runSQL(sql) {
+    return new Promise((resolve, reject) => {
+        dbCon.query(sql, function (err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+};
+
+module.exports = { runSQL, isResultEmpty};

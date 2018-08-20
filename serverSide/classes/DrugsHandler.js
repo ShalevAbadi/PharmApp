@@ -1,6 +1,7 @@
+var db = require('./DBHandler');
 module.exports = class DrugHandler {
 
-    constructor(db) {
+    constructor() {
         this.db = db;
     }
 
@@ -31,7 +32,7 @@ module.exports = class DrugHandler {
 
     getDrugByName(name) {
         let sql = "SELECT * FROM Drugs WHERE DrugName='" + name + "'";
-        return this.db.runSQL(sql).then(console.log.bind(console));;
+        return this.db.runSQL(sql).then(console.log.bind(console));
     }
 
     getDrugById(id) {

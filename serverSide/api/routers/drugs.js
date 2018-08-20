@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../../classes/DBHandler');
-const dataBase = new db();
-const dh = require('../../classes/DrugsHandler');
-const drugsHandler = new dh(dataBase);
+
+const drugsHandlerReq =  require('../../classes/DrugsHandler');
+const drugsHandler = new drugsHandlerReq();
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -49,7 +48,5 @@ router.post('/:drugId', (req, res, next) => {
     }
 
 });
-
-
 
 module.exports = router;
