@@ -1,9 +1,10 @@
 var User = require('./User');
 const crypto = require('crypto');
+var db = require('./DBHandler');
 
 module.exports = class UserHandler {
 
-    constructor(db) {
+    constructor() {
         this.db = db;
     }
 
@@ -14,7 +15,7 @@ module.exports = class UserHandler {
                 return new User(user.UserId, user.UserName);
             }
         }, (err) => {
-            console.log(err);
+            return err;
         });
     }
 
@@ -24,22 +25,22 @@ module.exports = class UserHandler {
             .then(
                 (result) => {
                     if (!this.db.isResultEmpty(result)) {
-                        console.log('already exist');
+                        return 'already exist';
                     } else {
                         this.createUser(userName, password).then((result) => {
                             if (!this.db.isResultEmpty(result)) {
-                                console.log('user created');
+                                return 'user created';
                             } else {
-                                console.log('error uccured')
+                                return 'error uccured';
                             }
                         },
                             (err) => {
-                                console.log(err);
+                                return err;
                             })
                     }
                 },
                 (err) => {
-                    console.log(err);
+                    return err;
                 });
     }
 

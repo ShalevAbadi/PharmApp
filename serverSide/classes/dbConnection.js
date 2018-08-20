@@ -7,5 +7,4 @@ var con = mysql.createConnection({
     database: "AbadiPharm"
 });
 
-con.connect();
 module.exports = con;

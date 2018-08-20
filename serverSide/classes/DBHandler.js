@@ -18,4 +18,4 @@ function runSQL(sql) {
     });
 };
 
-module.exports = { runSQL, isResultEmpty};
+module.exports = { runSQL, isResultEmpty };

@@ -1,12 +1,13 @@
+var db = require('./DBHandler');
 
 module.exports = class UserDrugsHandler {
 
-    constructor(db) {
+    constructor() {
         this.db = db;
     }
 
     createUserDrug(userDrug) {
-        return this.createUserDrugDB(userDrug.getUser().getId(), userDrug.getDrug().getId(), userDrug.getExp()).then(console.log.bind(console));
+        return this.createUserDrugDB(userDrug.getUser().getId(), userDrug.getDrug().getId(), userDrug.getExp());
     }
 
     createUserDrugDB(userId, drugId, expDate) {
@@ -14,8 +15,12 @@ module.exports = class UserDrugsHandler {
         return this.db.runSQL(sql);
     }
 
-    setUserDrugOpened(userDrugId) {
-        return this.setUserDrugOpenedDB(userDrugId, this.getDateFormated()).then(console.log.bind(console));
+    setUserDrugOpened(userDrugId, date) {
+        return this.setUserDrugOpenedDB(userDrugId, date);
+    }
+    
+    setUserDrugOpenedToday(userDrugId) {
+        return this.setUserDrugOpenedDB(userDrugId, this.getDateFormated());
     }
 
     setUserDrugOpenedDB(userDrugId, date) {
