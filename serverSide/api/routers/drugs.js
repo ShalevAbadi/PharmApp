@@ -38,15 +38,16 @@ router.post('/:drugId', (req, res, next) => {
         });
     } else {
         drugsHandler.getDrugById(id).then((result) => {
-
-            /*if (drugsHandler.db.isResultEmpty(result)) {
-                    return this.res.status(200).json("res: drug not found");
-                } else {*/
-            return this.res.status(200).json(result[0]);
-            //}
+            if (drugsHandler.db.isResultEmpty(result)) {
+                res.status(200).json({res: "drug not found"});
+            } else {
+                console.log(result[0]);
+                res.status(200).json(result[0]);
+            }
         },
             (err) => {
-                return (err);
+                console.log(err);
+                res.status(500).json({error: err});
             });
     }
 
