@@ -33,7 +33,20 @@ module.exports = class DrugHandler {
 
     getDrugByName(name) {
         let sql = "SELECT * FROM Drugs WHERE DrugName='" + name + "'";
-        return this.db.runSQL(sql);
+        return new Promise((resolve, reject) => {
+            db.runSQL(sql).then((result) => {
+                if (drugsHandler.db.isResultEmpty(result)) {
+                    reject(JSON({ res: "drug not found" }));
+                } else {
+                    console.log(result[0]);
+                    resolve(result[0]);
+                }
+            },
+                (err) => {
+                    console.log(err);
+                    reject(err);
+                });
+        }
     }
 
     getDrugById(id) {
