@@ -7,23 +7,25 @@ module.exports = class DrugHandler {
     }
 
     createDrugIfNotExist(drug) {
-        return this.getDrugByName(drug.getName()).then(
-            (result) => {
-                if (!this.db.isResultEmpty(result)) {
-                    return 'drug already exist';
-                } else {
-                    this.createDrug(drug.getName(), drug.getDaysAfterOpened).then((result) => {
-                        let msg = result ? 'Drug created' : 'db error occured2';
-                        return (msg);
-                    }, (err) => {
-                        return (err);
-                    })
+        return new Promise((resolve, reject) => {
+            this.getDrugByName(drug.getName()).then(
+                (result) => {
+                    if (!this.db.isResultEmpty(result)) {
+                        resolve();
+                    } else {
+                        this.createDrug(drug.getName(), drug.getDaysAfterOpened()).then((result) => {
+                           //let msg = result ? 'Drug created' : 'db error occured2';
+                            resolve (result);
+                        }, (err) => {
+                            reject (err);
+                        })
 
-                }
-            },
-            (err) => {
-                return (err);
-            });
+                    }
+                },
+                (err) => {
+                    reject (err);
+                });
+        })
     }
 
     createDrug(name, daysAfterOpened) {
@@ -35,12 +37,8 @@ module.exports = class DrugHandler {
         let sql = "SELECT * FROM Drugs WHERE DrugName='" + name + "'";
         return new Promise((resolve, reject) => {
             this.db.runSQL(sql).then((result) => {
-                if (this.db.isResultEmpty(result)) {
-                    reject(JSON({ res: "drug not found" }));
-                } else {
-                    console.log(result[0]);
-                    resolve(result);
-                }
+                console.log(result[0]);
+                resolve(result);
             },
                 (err) => {
                     console.log(err);

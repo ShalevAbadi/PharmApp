@@ -1,3 +1,5 @@
+var drugsHandlerReq = require('./DrugsHandler');
+var drugsHandler = new drugsHandlerReq();
 module.exports = class Drug {
 
     constructor(id, name, daysAfterOpened) {
@@ -17,6 +19,5 @@ module.exports = class Drug {
     getDaysAfterOpened() {
         return this.daysAfterOpened;
     }
-
 
 };

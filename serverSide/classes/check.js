@@ -30,7 +30,7 @@ var userDrugsHandler = new UDH();
 });*/
 
 //drugHandler.createDrugIfNotExist(drug).then(console.log.bind(console));
-drugHandler.getDrugByName('Acamol').then(console.log.bind(console));
+//drugHandler.getDrugByName('Acamol').then(console.log.bind(console));
 //user.getDrugByName('Acamol').then((result) => {console.log(result[0].DaysAfterOpened)});
 //userDrugsHandler.getUserDrugs(1).then(console.log.bind(console));
 //userDrugsHandler.setUserDrugOpened(3, '2068-01-20').then(console.log.bind(console));

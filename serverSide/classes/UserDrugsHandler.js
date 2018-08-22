@@ -18,7 +18,7 @@ module.exports = class UserDrugsHandler {
     setUserDrugOpened(userDrugId, date) {
         return this.setUserDrugOpenedDB(userDrugId, date);
     }
-    
+
     setUserDrugOpenedToday(userDrugId) {
         return this.setUserDrugOpenedDB(userDrugId, this.getDateFormated());
     }
@@ -43,7 +43,6 @@ module.exports = class UserDrugsHandler {
     getUserDrugs(userId) {
         let sql = "SELECT * FROM userdrugs WHERE UserId='" + userId + "'";
         return this.db.runSQL(sql);
-
     }
 
     deleteUserDrug(userDrugId) {

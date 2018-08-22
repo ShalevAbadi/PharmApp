@@ -7,6 +7,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const drugRouter = require('../api/routers/drugs');
+const userDrugsRouter = require('../api/routers/userDrugs');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -25,14 +26,13 @@ app.use((req, res, next) => {
 });
 
 app.use('/drugs', drugRouter);
+app.use('/userDrugs', userDrugsRouter);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
     error.status = 404;
     next(error);
 });
-
-app.use('/drugs', drugRouter);
 
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
