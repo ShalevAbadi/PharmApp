@@ -41,7 +41,6 @@ router.post('/', (req, res, next) => {
         (err) => {
             res.status(500).json({ error: err });
         });
-
 });
 
 router.patch('/:userDrugId', (req, res, next) => {
