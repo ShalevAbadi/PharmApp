@@ -14,45 +14,40 @@ class App extends Component {
       { id: 6, name: 'Gcamol', daysAfterOpened: 180 }
     ],
     userDrugs: [
-      { id: 0, userName: 'userTest', drugName: 'Acamol', expirationDate: new Date(), isOpened: false },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 90)), isOpened: false },
-      { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false },
-      { id: 3, userName: 'userTest', drugName: 'Dcamol', expirationDate: new Date(), isOpened: false }
+      { id: 0, userName: 'userTest', drugName: 'Acamol', expirationDate: new Date(), isOpened: false, isDeleted: false },
+      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 90)), isOpened: false, isDeleted: false },
+      { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false, isDeleted: false },
+      { id: 3, userName: 'userTest', drugName: 'Dcamol', expirationDate: new Date(), isOpened: false, isDeleted: false }
     ]
   }
 
-  updateDrug = (newDrug) => {
-    let newUserDrugs = this.state.userDrugs.map((currentDrug) => {
-      if (currentDrug.id === newDrug.id) {
-        return newDrug;
+  updateUserDrug = (newUserDrug) => {
+    let newUserDrugs = this.state.userDrugs.map((currentUserDrug) => {
+      if (currentUserDrug.id === newUserDrug.id) {
+        return newUserDrug;
       }
-      return currentDrug;
+      return currentUserDrug;
     });
     this.setState({ userDrugs: newUserDrugs });
   }
 
-  onDrugDeleted = (drugToDelete) => {
-    let newUserDrugs = this.state.userDrugs.filter((currentDrug) => {
-      return currentDrug !== drugToDelete;
-    })
-    this.setState({ userDrugs: newUserDrugs });
+  onUserDrugDeleted = (userDrugToDelete) => {
+    let newUserDrug = { ...userDrugToDelete, isDeleted: true };
+    this.updateUserDrug(newUserDrug);
   }
 
-  onDrugOpened = (drugToOpen) => {
-    let daysAfterOpened = this.getDaysAfterOpened(drugToOpen.drugName);
-    let newDrug = this.setNewDate(drugToOpen, daysAfterOpened);
-    this.updateDrug(newDrug);
+  onUserDrugOpened = (userDrugToOpen) => {
+    let daysAfterOpened = this.getDaysAfterOpened(userDrugToOpen.drugName);
+    let newUserDrug = { ...userDrugToOpen, expirationDate: this.getExpirationDate(userDrugToOpen.expirationDate, daysAfterOpened), isOpened: true }
+    this.updateUserDrug(newUserDrug);
   }
 
-  setNewDate = (drugToUpdate, daysUntillExpire) => {
-    if (daysUntillExpire === Infinity) {
-      return { ...drugToUpdate, isOpened: true };
+  getExpirationDate(closedExpirationDate, daysAfterOpened) {
+    if (daysAfterOpened === Infinity) {
+      return closedExpirationDate;
     }
-    let currentExp = drugToUpdate.expirationDate;
-    let newExp = new Date((new Date()).getTime() + (86400000 * daysUntillExpire))
-    let newDate = (currentExp <= newExp ? currentExp : newExp);
-    let newDrug = { ...drugToUpdate, expirationDate: newDate, isOpened: true };
-    return newDrug;
+    let newExp = new Date((new Date()).getTime() + (86400000 * daysAfterOpened))
+    return (closedExpirationDate <= newExp ? closedExpirationDate : newExp);
   }
 
   getDaysAfterOpened = (drugToSearchName) => {
@@ -61,7 +56,6 @@ class App extends Component {
     })
     return drugFound.daysAfterOpened;
   }
-
 
   render() {
     return (
@@ -72,7 +66,7 @@ class App extends Component {
         </div>
         <div className='user-drugs'>
           <h1> here all your drugs</h1>
-          <UserDrugs userDrugsList={this.state.userDrugs} drugOpened={this.onDrugOpened} drugDeleted={this.onDrugDeleted} />
+          <UserDrugs userDrugsList={this.state.userDrugs} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} />
         </div>
         <div className='drugs-list'>
         </div>

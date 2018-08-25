@@ -12,7 +12,10 @@ export class UserDrugs extends React.Component {
                 <th>Drug Functions</th>
             </tr>
             {this.props.userDrugsList.map((userDrug) => {
-                return <UserDrugView drugOpened={this.props.drugOpened} drugDeleted={this.props.drugDeleted} drug={userDrug} />
+                if (!userDrug.isDeleted) {
+                    return <UserDrugView drugOpened={this.props.drugOpened} drugDeleted={this.props.drugDeleted} drug={userDrug} />
+                }
+                return null;
             })}
         </table>
 
