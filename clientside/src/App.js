@@ -5,7 +5,7 @@ import { UserDrugs } from './userDrug.comp';
 class App extends Component {
   state = {
     drugs: [
-      { id: 0, name: 'Acamol', daysAfterOpened: 180 },
+      { id: 0, name: 'Acamol', daysAfterOpened: 10 },
       { id: 1, name: 'Bcamol', daysAfterOpened: 6 },
       { id: 2, name: 'Ccamol', daysAfterOpened: 180 },
       { id: 3, name: 'Dcamol', daysAfterOpened: Infinity },
@@ -15,22 +15,13 @@ class App extends Component {
     ],
     userDrugs: [
       { id: 0, userName: 'userTest', drugName: 'Acamol', expirationDate: new Date(), isOpened: false },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date(), isOpened: false },
+      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false },
       { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date(), isOpened: false },
       { id: 3, userName: 'userTest', drugName: 'Dcamol', expirationDate: new Date(), isOpened: false }
     ]
   }
 
-  onDrugDeleted = (drugToDelete) => {
-    let newUserDrugs = this.state.userDrugs.filter((currentDrug) => {
-      return currentDrug !== drugToDelete;
-    })
-    this.setState({userDrugs : newUserDrugs});
-  }
-
-  onDrugOpened = (drugToOpen) => {
-    let daysAfterOpened = this.getDaysAfterOpened(drugToOpen.drugName);
-    let newDrug = this.setNewDate(drugToOpen, daysAfterOpened);
+  updateDrug = (newDrug) => {
     let newUserDrugs = this.state.userDrugs.map((currentDrug) => {
       if (currentDrug.id === newDrug.id) {
         return newDrug;
@@ -40,12 +31,26 @@ class App extends Component {
     this.setState({ userDrugs: newUserDrugs });
   }
 
+  onDrugDeleted = (drugToDelete) => {
+    let newUserDrugs = this.state.userDrugs.filter((currentDrug) => {
+      return currentDrug !== drugToDelete;
+    })
+    this.setState({ userDrugs: newUserDrugs });
+  }
+
+  onDrugOpened = (drugToOpen) => {
+    let daysAfterOpened = this.getDaysAfterOpened(drugToOpen.drugName);
+    let newDrug = this.setNewDate(drugToOpen, daysAfterOpened);
+    this.updateDrug(newDrug);
+  }
+
   setNewDate = (drugToUpdate, daysUntillExpire) => {
     if (daysUntillExpire === Infinity) {
       return { ...drugToUpdate, isOpened: true };
     }
-    let today = new Date();
-    let newDate = new Date(today.getTime() + (86400000 * daysUntillExpire))
+    let currentExp = drugToUpdate.expirationDate;
+    let newExp = new Date((new Date()).getTime() + (86400000 * daysUntillExpire))
+    let newDate = (currentExp <= newExp ? currentExp : newExp);
     let newDrug = { ...drugToUpdate, expirationDate: newDate, isOpened: true };
     return newDrug;
   }

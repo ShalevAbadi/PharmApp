@@ -8,6 +8,17 @@ export class UserDrugView extends React.Component {
         }
     }
 
+    format2Digits(num) {
+        return (num > 9 ? num : '0' + num)
+    }
+
+    formatDate(date) {
+        let year = date.getFullYear();
+        let month = this.format2Digits(date.getMonth());
+        let day = this.format2Digits(date.getDate());
+        return year + '-' + month + '-' + day
+    }
+
     onOpened = () => {
         this.props.drugOpened(this.props.drug);
     }
@@ -20,7 +31,7 @@ export class UserDrugView extends React.Component {
         return (
             <tr>
                 <td> {this.props.drug.drugName}</td>
-                <td> {this.props.drug.expirationDate.toString()}</td>
+                <td> {this.formatDate(this.props.drug.expirationDate)} </td>
                 <td>
                     {this.checkDateOpendOrButton()}
                     <button>edit</button>
