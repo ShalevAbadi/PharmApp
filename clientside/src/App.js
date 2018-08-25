@@ -7,7 +7,7 @@ class App extends Component {
     drugs: [
       { id: 0, name: 'Acamol', daysAfterOpened: 10 },
       { id: 1, name: 'Bcamol', daysAfterOpened: 6 },
-      { id: 2, name: 'Ccamol', daysAfterOpened: 180 },
+      { id: 2, name: 'Ccamol', daysAfterOpened: 0 },
       { id: 3, name: 'Dcamol', daysAfterOpened: Infinity },
       { id: 4, name: 'Ecamol', daysAfterOpened: 180 },
       { id: 5, name: 'Fcamol', daysAfterOpened: 180 },
@@ -15,8 +15,8 @@ class App extends Component {
     ],
     userDrugs: [
       { id: 0, userName: 'userTest', drugName: 'Acamol', expirationDate: new Date(), isOpened: false },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false },
-      { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date(), isOpened: false },
+      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 90)), isOpened: false },
+      { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false },
       { id: 3, userName: 'userTest', drugName: 'Dcamol', expirationDate: new Date(), isOpened: false }
     ]
   }

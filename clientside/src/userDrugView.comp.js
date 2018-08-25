@@ -27,11 +27,19 @@ export class UserDrugView extends React.Component {
         this.props.drugDeleted(this.props.drug);
     }
 
+    checkExpired = () =>{
+        return (this.props.drug.expirationDate <= new Date())
+    }
+
+    pickStyleColor = () =>{
+        return {color: (this.checkExpired() ? 'red' : 'green')};
+    }
+
     render() {
         return (
             <tr>
                 <td> {this.props.drug.drugName}</td>
-                <td> {this.formatDate(this.props.drug.expirationDate)} </td>
+                <td style={this.pickStyleColor()}> {this.formatDate(this.props.drug.expirationDate)} </td>
                 <td>
                     {this.checkDateOpendOrButton()}
                     <button>edit</button>
