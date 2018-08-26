@@ -14,10 +14,10 @@ class App extends Component {
       { id: 6, name: 'Gcamol', daysAfterOpened: 180 }
     ],
     userDrugs: [
-      { id: 0, userName: 'userTest', drugName: 'Acamol', expirationDate: new Date(), isOpened: false, isDeleted: false },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 90)), isOpened: false, isDeleted: false },
-      { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false, isDeleted: false },
-      { id: 3, userName: 'userTest', drugName: 'Dcamol', expirationDate: new Date(), isOpened: false, isDeleted: false }
+      { id: 0, userName: 'userTest', drugName: 'Acamol', expirationDate: new Date(), isOpened: false, isDeleted: false, isEditing: true },
+      { id: 1, userName: 'userTest', drugName: 'Bcamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 90)), isOpened: false, isDeleted: false, isEditing: false },
+      { id: 2, userName: 'userTest', drugName: 'Ccamol', expirationDate: new Date((new Date()).getTime() + (86400000 * 100)), isOpened: false, isDeleted: false, isEditing: false },
+      { id: 3, userName: 'userTest', drugName: 'Dcamol', expirationDate: new Date(), isOpened: false, isDeleted: false, isEditing: false }
     ]
   }
 
@@ -29,6 +29,11 @@ class App extends Component {
       return currentUserDrug;
     });
     this.setState({ userDrugs: newUserDrugs });
+  }
+
+  onUserDrugEdit = (userDrugToEdit) => {
+    let newUserDrug = { ...userDrugToEdit, isEditing: true };
+    this.updateUserDrug(newUserDrug);
   }
 
   onUserDrugDeleted = (userDrugToDelete) => {
@@ -66,7 +71,7 @@ class App extends Component {
         </div>
         <div className='user-drugs'>
           <h1> here all your drugs</h1>
-          <UserDrugs userDrugsList={this.state.userDrugs} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} />
+          <UserDrugs userDrugsList={this.state.userDrugs} toggleDrugEdit= {this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} />
         </div>
         <div className='drugs-list'>
         </div>

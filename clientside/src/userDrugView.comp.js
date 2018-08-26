@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export class UserDrugView extends React.Component {
 
-    checkDateOpendOrButton = () => {
+    checkIfOpenButton = () => {
         if (!this.props.drug.isOpened) {
             return <button onClick={this.onOpened}>open</button>;
         }
@@ -23,6 +23,10 @@ export class UserDrugView extends React.Component {
         this.props.drugOpened(this.props.drug);
     }
 
+    onEdit =() =>{
+        this.props.toggleDrugEdit(this.props.drug);
+    }
+
     onDeleted = () => {
         this.props.drugDeleted(this.props.drug);
     }
@@ -41,8 +45,8 @@ export class UserDrugView extends React.Component {
                 <td> {this.props.drug.drugName}</td>
                 <td style={this.pickStyleColor()}> {this.formatDate(this.props.drug.expirationDate)} </td>
                 <td>
-                    {this.checkDateOpendOrButton()}
-                    <button>edit</button>
+                    {this.checkIfOpenButton()}
+                    <button onClick={this.onEdit}>edit</button>
                     <button onClick={this.onDeleted}>delete</button>
                 </td>
             </tr>
