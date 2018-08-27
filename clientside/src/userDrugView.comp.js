@@ -1,6 +1,10 @@
 import * as React from 'react';
 
 export class UserDrugView extends React.Component {
+    
+    getExpirationToShow = () => {
+        return this.props.getExpirationToShow(this.props.drug);
+    }
 
     checkIfOpenButton = () => {
         if (!this.props.drug.isOpened) {
@@ -23,7 +27,7 @@ export class UserDrugView extends React.Component {
         this.props.drugOpened(this.props.drug);
     }
 
-    onEdit =() =>{
+    onEdit = () => {
         this.props.toggleDrugEdit(this.props.drug);
     }
 
@@ -32,7 +36,7 @@ export class UserDrugView extends React.Component {
     }
 
     checkExpired = () => {
-        return (this.props.drug.expirationDate <= new Date())
+        return (this.getExpirationToShow() <= new Date())
     }
 
     pickStyleColor = () => {
@@ -43,7 +47,7 @@ export class UserDrugView extends React.Component {
         return (
             <tr>
                 <td> {this.props.drug.drugName}</td>
-                <td style={this.pickStyleColor()}> {this.formatDate(this.props.drug.expirationDate)} </td>
+                <td style={this.pickStyleColor()}> {this.formatDate(this.getExpirationToShow())} </td>
                 <td>
                     {this.checkIfOpenButton()}
                     <button onClick={this.onEdit}>edit</button>

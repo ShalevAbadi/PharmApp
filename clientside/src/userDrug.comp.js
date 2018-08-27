@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { UserDrugView } from './userDrugView.comp';
-import { UserDrugEdit } from './userDrugEdit.comp';
 export class UserDrugs extends React.Component {
-
 
     render() {
         return <table>
@@ -13,10 +11,7 @@ export class UserDrugs extends React.Component {
             </tr>
             {this.props.userDrugsList.map((userDrug) => {
                 if (!userDrug.isDeleted) {
-                    if (userDrug.isEditing) {
-                        return <UserDrugEdit drugEdited={this.props.drugEdited} drugOpened={this.props.drugOpened} drugDeleted={this.props.drugDeleted} drug={userDrug} />
-                    }
-                    return <UserDrugView toggleDrugEdit={this.props.toggleDrugEdit} drugOpened={this.props.drugOpened} drugDeleted={this.props.drugDeleted} drug={userDrug} />
+                    return <UserDrugView getExpirationToShow= {this.props.getExpirationToShow} toggleDrugEdit={this.props.toggleDrugEdit} drugOpened={this.props.drugOpened} drugDeleted={this.props.drugDeleted} drug={userDrug} />
                 }
                 return null;
             })}
