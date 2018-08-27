@@ -15,7 +15,7 @@ export class UserDrugEdit extends React.Component {
     format2Digits(num) {
         return (num > 9 ? num : '0' + num)
     }
-
+    
     formatDate(date) {
         let year = date.getFullYear();
         let month = this.format2Digits(date.getMonth());
@@ -28,10 +28,6 @@ export class UserDrugEdit extends React.Component {
         this.setState({ isOpened: val });
     }
 
-    showExpirationOrOpened = () => {
-        return (this.state.isOpened ? "Date Opened" : "Expiration Date");
-    }
-
     render() {
         return (
             <div>
@@ -41,7 +37,7 @@ export class UserDrugEdit extends React.Component {
                 <form>
                     <label>
                         Is Opened?
-                        <input type="checkbox" name="isOpened" value={this.state.isOpened} onClick={this.toggleOpen} />
+                        <input type="checkbox" name="isOpened" checked={this.state.isOpened} onClick={this.toggleOpen} />
                     </label>
                     {this.showEditOpenedOrClosed()}
                 </form>

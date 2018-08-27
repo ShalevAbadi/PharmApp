@@ -15,15 +15,14 @@ class App extends Component {
       { id: 6, name: 'Gcamol', daysAfterOpened: 180 }
     ],
     userDrugs: [
-      { id: 0, userName: 'userTest', drugName: 'Acamol', closedExpirationDate: new Date(), dateOpened: new Date, isOpened: false, isDeleted: false, isEditing: true },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 90)), dateOpened: new Date, isOpened: false, isDeleted: false, isEditing: false },
+      { id: 0, userName: 'userTest', drugName: 'Acamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 90)), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false },
+      { id: 1, userName: 'userTest', drugName: 'Bcamol', closedExpirationDate: new Date((new Date()).getTime() - (86400000 * 90)), dateOpened: new Date, isOpened: false, isDeleted: false, isEditing: false },
       { id: 2, userName: 'userTest', drugName: 'Ccamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 100)), dateOpened: null, isOpened: false, isDeleted: false, isEditing: false },
-      { id: 3, userName: 'userTest', drugName: 'Dcamol', closedExpirationDate: new Date(), dateOpened: null, isOpened: false, isDeleted: false, isEditing: false }
+      { id: 3, userName: 'userTest', drugName: 'Dcamol', closedExpirationDate: new Date(), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false }
     ]
   }
 
   updateUserDrug = (newUserDrug) => {
-    alert('banana!!');
     let newUserDrugs = this.state.userDrugs.map((currentUserDrug) => {
       if (currentUserDrug.id === newUserDrug.id) {
         return newUserDrug;
@@ -66,12 +65,27 @@ class App extends Component {
     return drugFound.daysAfterOpened;
   }
 
-  render() {
-    return (
+  checkIfEditWindow() {
+    let drugFound = this.state.userDrugs.find((drugToCheck) => {
+      return drugToCheck.isEditing === true;
+    })
+    if (drugFound) {
+      return (
 
-      <UserDrugEdit getExpirationToShow={this.getExpirationDateToShow} drugsEdited={this.updateUserDrug} drug={this.state.userDrugs[0]} />
-    );
-      {/*<div>
+        <UserDrugEdit getExpirationToShow={this.getExpirationDateToShow} drugEdited={this.updateUserDrug} drug={drugFound} />
+      )
+    }
+    return
+  }
+
+  render() {
+
+    let isEdit = this.checkIfEditWindow(); 
+    if(isEdit){
+      return isEdit;
+    }
+    return (
+      < div >
         <div className='user-welcome'>
           <h1>Hello {this.props.user.name}</h1>
           <p> you logged at {this.props.user.loggedAt.toString()}</p>
@@ -82,7 +96,8 @@ class App extends Component {
         </div>
         <div className='drugs-list'>
         </div>
-      </div>*/}
+      </div >
+    );
   }
 }
 
