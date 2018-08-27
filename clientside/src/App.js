@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import { UserDrugs } from './userDrug.comp';
 import { UserDrugEdit } from './userDrugEdit.comp';
+import { AddUserDrug } from './addUserDrug.comp';
 
 class App extends Component {
   state = {
+    page: 'addUserDrug',
+    userName: 'userTest',
+    nextDrugId: 6,
+    nextUserDrugId: 4,
     drugs: [
       { id: 0, name: 'Acamol', daysAfterOpened: 10 },
       { id: 1, name: 'Bcamol', daysAfterOpened: 6 },
@@ -20,6 +25,15 @@ class App extends Component {
       { id: 2, userName: 'userTest', drugName: 'Ccamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 100)), dateOpened: null, isOpened: false, isDeleted: false, isEditing: false },
       { id: 3, userName: 'userTest', drugName: 'Dcamol', closedExpirationDate: new Date(), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false }
     ]
+  }
+
+  addUserDrug = (newUserDrug) => {
+    let nextId = this.state.nextUserDrugId;
+    newUserDrug = { ...newUserDrug, id: nextId, isEditing: false };
+    nextId++;
+    this.setState({ nextUserDrugId: nextId });
+    this.state.userDrugs.push(newUserDrug);
+    this.setState({ page: '' });
   }
 
   updateUserDrug = (newUserDrug) => {
@@ -79,9 +93,11 @@ class App extends Component {
   }
 
   render() {
-
-    let isEdit = this.checkIfEditWindow(); 
-    if(isEdit){
+    if (this.state.page === 'addUserDrug') {
+      return <AddUserDrug addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
+    }
+    let isEdit = this.checkIfEditWindow();
+    if (isEdit) {
       return isEdit;
     }
     return (

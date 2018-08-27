@@ -45,9 +45,9 @@ export class UserDrugEditDateClosed extends React.Component {
                     <form onSubmit={this.handleSubmit}>
                         <input type="number" name="year" cols="4" rows="1" defaultValue={this.state.year} onChange={this.handleInputChange} />
                         -
-                    <input type="number" name="month" cols="2" rows="1" defaultValue={this.format2Digits(this.state.month)} onChange={this.handleInputChange} />
+                        <input type="number" name="month" cols="2" rows="1" defaultValue={this.format2Digits(this.state.month)} onChange={this.handleInputChange} />
                         -
-                    <input type="number" name="day" cols="2" rows="1" defaultValue={this.format2Digits(this.state.day)} onChange={this.handleInputChange} />
+                        <input type="number" name="day" cols="2" rows="1" defaultValue={this.format2Digits(this.state.day)} onChange={this.handleInputChange} />
                         <input type="submit" value="Submit" />
                     </form>
                 </div>
