@@ -9,22 +9,14 @@ export class UserDrugEdit extends React.Component {
         day: this.props.drug.isOpened ? this.props.drug.dateOpened.getDate() : this.props.drug.closedExpirationDate.getDate()
     }
 
-    handleSubmit = (event) => {
-        let newDate = new Date(this.state.year, this.state.month, this.state.day);
+    handleSubmit = (event, refs) => {
+        let newDate = new Date(refs.year.value, refs.month.value, refs.day.value);
         let oldUserDrug = this.props.drug;
         let newUserDrug = this.state.isOpened ?
             { ...oldUserDrug, dateOpened: newDate, isOpened: true, isEditing: false } :
             { ...oldUserDrug, closedExpirationDate: newDate, isOpened: false, isEditing: false };
         event.preventDefault();
         this.props.drugEdited(newUserDrug);
-    }
-
-    handleChange = (event) => {
-        let name = event.target.name;
-        this.setState({
-            [name]: event.target.value
-        })
-
     }
 
     showEditOpenedOrClosed() {
@@ -42,14 +34,14 @@ export class UserDrugEdit extends React.Component {
                 <div>
                     <h1>{this.props.drug.drugName}</h1>
                 </div>
-                <form>
-                    <label>
-                        Is Opened?
-                        <input type="checkbox" name="isOpened" checked={this.state.isOpened} onClick={this.toggleOpen} />
-                    </label>
-                    <h1>{this.showEditOpenedOrClosed()} (yyyy/mm/dd) </h1>
-                    <UserDrugEditView drug={this.props.drug} handleSubmit={this.handleSubmit} handleChange={this.handleChange} year={this.state.year} month={this.state.month} day={this.state.day} />
-                </form>
+
+                <label>
+                    Is Opened?
+                        <input type="checkbox" name="isOpened" defaultChecked={this.state.isOpened} onClick={this.toggleOpen} />
+                </label>
+                <h1>{this.showEditOpenedOrClosed()} (yyyy/mm/dd) </h1>
+                <UserDrugEditView drug={this.props.drug} handleSubmit={this.handleSubmit} handleChange={this.handleChange} year={this.state.year} month={this.state.month} day={this.state.day} />
+
             </div >
         );
     }

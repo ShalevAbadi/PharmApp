@@ -7,38 +7,29 @@ export class AddUserDrug extends React.Component {
         this.state = {
             drugName: this.props.drugsList[0].name,
             isOpened: false,
-            expirationYear: date.getFullYear(),
-            expirationMonth: date.getMonth(),
-            expirationDay: date.getDate(),
-            yearOpened: date.getFullYear(),
-            monthOpened: date.getMonth(),
-            dayOpened: date.getDate(),
+            year: date.getFullYear(),
+            month: date.getMonth(),
+            day: date.getDate(),
             userDrugToAdd: { drugName: '', closedExpirationDate: new Date(), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false }
         }
     }
 
     handleSubmit = (event) => {
-        let expirationDate = new Date(this.state.expirationYear, this.state.expirationMonth, this.state.expirationDay);
+        let expirationDate = new Date(this.refs.expirationYear.value, this.refs.expirationMonth.value, this.refs.expirationDay.value);
         let newUserDrug = { drugName: this.state.drugName, closedExpirationDate: expirationDate, isOpened: this.state.isOpened, isEditing: false };
-        if (newUserDrug.isOpened){
-        let newDateOpened =  new Date(this.state.yearOpened, this.state.monthOpened, this.state.dayOpened);
-        newUserDrug = {...newUserDrug, dateOpened: newDateOpened, isOpened: true}
-    }
-    alert(newUserDrug.drugName);
-    event.preventDefault();
-    this.props.addUserDrug(newUserDrug);
+        if (newUserDrug.isOpened) {
+            let newDateOpened = new Date(this.refs.yearOpened.value, this.refs.monthOpened.value, this.refs.dayOpened.value);
+            newUserDrug = { ...newUserDrug, dateOpened: newDateOpened, isOpened: true }
+        }
+        event.preventDefault();
+        this.props.addUserDrug(newUserDrug);
     }
 
-    handleInputChange = (event) => {
-        let name = event.target.name;
-        this.setState({
-            [name]: event.target.value
-        })
-    }
+
 
     handleNameChange = (event) => {
-        this.setState({drugName: event.target.value});
-      }
+        this.setState({ drugName: event.target.value });
+    }
 
     toggleOpen = () => {
         let val = !(this.state.isOpened);
@@ -49,11 +40,11 @@ export class AddUserDrug extends React.Component {
         if (this.state.isOpened) {
             return (<label>
                 Date Opened (yyyy/mm/dd):
-                        <input type="number" name="yearOpened" cols="4" rows="1" defaultValue={this.state.yearOpened} onChange={this.handleInputChange} />
+                        <input type="number" ref="yearOpened" cols="4" rows="1" defaultValue={this.state.year} />
                 -
-                        <input type="number" name="monthOpened" cols="2" rows="1" defaultValue={(this.state.monthOpened)} onChange={this.handleInputChange} />
+                        <input type="number" ref="monthOpened" cols="2" rows="1" defaultValue={(this.state.month)} />
                 -
-                        <input type="number" name="dayOpened" cols="2" rows="1" defaultValue={(this.state.dayOpened)} onChange={this.handleInputChange} />
+                        <input type="number" ref="dayOpened" cols="2" rows="1" defaultValue={(this.state.day)} />
             </label>
             )
         }
@@ -68,7 +59,7 @@ export class AddUserDrug extends React.Component {
                         Drug Name:
                         < select value={this.state.value} onChange={this.handleNameChange} >
                             {this.props.drugsList.map((drug) => {
-                                return <option  value={drug.drugName}>{drug.name}</option>
+                                return <option key={drug.name} value={drug.drugName}>{drug.name}</option>
                             })
                             }
                         </select >
@@ -76,11 +67,11 @@ export class AddUserDrug extends React.Component {
                     <br />
                     <label>
                         Expiration Date (yyyy/mm/dd):
-                        <input type="number" name="ExpirationYear" cols="4" rows="1" defaultValue={this.state.expirationYear} onChange={this.handleInputChange} />
+                        <input type="number" ref="expirationYear" cols="4" rows="1" defaultValue={this.state.year} />
                         -
-                        <input type="number" name="ExpirationMonth" cols="2" rows="1" defaultValue={(this.state.expirationMonth)} onChange={this.handleInputChange} />
+                        <input type="number" ref="expirationMonth" cols="2" rows="1" defaultValue={(this.state.month)} />
                         -
-                        <input type="number" name="ExpirationDay" cols="2" rows="1" defaultValue={(this.state.expirationDay)} onChange={this.handleInputChange} />
+                        <input type="number" ref="expirationDay" cols="2" rows="1" defaultValue={(this.state.day)} />
                     </label>
                     <br />
                     <label>
@@ -89,7 +80,7 @@ export class AddUserDrug extends React.Component {
                     </label>
                     <br />
                     {this.showDateOpenedInput()}
-                    <br/>
+                    <br />
                     <input type="submit" value="Submit" />
                 </form>
             </div>
