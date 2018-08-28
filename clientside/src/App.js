@@ -6,7 +6,7 @@ import { AddUserDrug } from './addUserDrug.comp';
 
 class App extends Component {
   state = {
-    page: 'addUserDrug',
+    page: '',
     userName: 'userTest',
     nextDrugId: 6,
     nextUserDrugId: 4,
