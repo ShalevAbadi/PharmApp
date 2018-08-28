@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { UserDrugEditDateOpened } from './userDrugEditDateOpened.comp';
 import { UserDrugEditView } from './userDrugEditView.comp';
 export class UserDrugEdit extends React.Component {
 

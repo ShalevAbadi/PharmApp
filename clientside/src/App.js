@@ -6,7 +6,7 @@ import { AddUserDrug } from './addUserDrug.comp';
 
 class App extends Component {
   state = {
-    page: '',
+    page: 'addUserDrug',
     userName: 'userTest',
     nextDrugId: 6,
     nextUserDrugId: 4,
@@ -44,11 +44,13 @@ class App extends Component {
       return currentUserDrug;
     });
     this.setState({ userDrugs: newUserDrugs });
+    this.state.page ==='edit' ? this.setState({page: ''}) : null ;
   }
 
   onUserDrugEdit = (userDrugToEdit) => {
     let newUserDrug = { ...userDrugToEdit, isEditing: true };
     this.updateUserDrug(newUserDrug);
+    this.setState({ page: 'edit'});
   }
 
   onUserDrugDeleted = (userDrugToDelete) => {
@@ -85,7 +87,6 @@ class App extends Component {
     })
     if (drugFound) {
       return (
-
         <UserDrugEdit getExpirationToShow={this.getExpirationDateToShow} drugEdited={this.updateUserDrug} drug={drugFound} />
       )
     }
@@ -96,9 +97,8 @@ class App extends Component {
     if (this.state.page === 'addUserDrug') {
       return <AddUserDrug addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
     }
-    let isEdit = this.checkIfEditWindow();
-    if (isEdit) {
-      return isEdit;
+    if (this.state.page === 'edit') {
+      return this.checkIfEditWindow();
     }
     return (
       < div >

@@ -5,7 +5,7 @@ export class AddUserDrug extends React.Component {
         super(props)
         let date = new Date;
         this.state = {
-            drugName: '',
+            drugName: this.props.drugsList[0].name,
             isOpened: false,
             expirationYear: date.getFullYear(),
             expirationMonth: date.getMonth(),
@@ -19,14 +19,14 @@ export class AddUserDrug extends React.Component {
 
     handleSubmit = (event) => {
         let expirationDate = new Date(this.state.expirationYear, this.state.expirationMonth, this.state.expirationDay);
-        let oldUserDrug = this.props.drug; 
-        let newUserDrug = { ...oldUserDrug, closedExpirationDate: expirationDate, isOpened: false, isEditing: false };
-        if (this.state.isOpened){
+        let newUserDrug = { drugName: this.state.drugName, closedExpirationDate: expirationDate, isOpened: this.state.isOpened, isEditing: false };
+        if (newUserDrug.isOpened){
         let newDateOpened =  new Date(this.state.yearOpened, this.state.monthOpened, this.state.dayOpened);
         newUserDrug = {...newUserDrug, dateOpened: newDateOpened, isOpened: true}
-        }
-        event.preventDefault();
-        this.props.addUserDrug(newUserDrug);
+    }
+    alert(newUserDrug.drugName);
+    event.preventDefault();
+    this.props.addUserDrug(newUserDrug);
     }
 
     handleInputChange = (event) => {
