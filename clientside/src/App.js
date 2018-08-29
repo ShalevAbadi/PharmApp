@@ -5,10 +5,11 @@ import { UserDrugEdit } from './userDrugEdit.comp';
 import { AddUserDrug } from './addUserDrug.comp';
 
 class App extends Component {
+
   state = {
-    page: 'addUserDrug',
+    page: '',
     userName: 'userTest',
-    nextDrugId: 6,
+    nextDrugId: 7,
     nextUserDrugId: 4,
     drugs: [
       { id: 0, name: 'Acamol', daysAfterOpened: 10 },
@@ -20,11 +21,20 @@ class App extends Component {
       { id: 6, name: 'Gcamol', daysAfterOpened: 180 }
     ],
     userDrugs: [
-      { id: 0, userName: 'userTest', drugName: 'Acamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 90)), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', closedExpirationDate: new Date((new Date()).getTime() - (86400000 * 90)), dateOpened: new Date, isOpened: false, isDeleted: false, isEditing: false },
+      { id: 0, userName: 'userTest', drugName: 'Acamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 90)), dateOpened: new Date(), isOpened: true, isDeleted: false, isEditing: false },
+      { id: 1, userName: 'userTest', drugName: 'Bcamol', closedExpirationDate: new Date((new Date()).getTime() - (86400000 * 90)), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false },
       { id: 2, userName: 'userTest', drugName: 'Ccamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 100)), dateOpened: null, isOpened: false, isDeleted: false, isEditing: false },
       { id: 3, userName: 'userTest', drugName: 'Dcamol', closedExpirationDate: new Date(), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false }
     ]
+  }
+
+  addDrug = (newDrug) => {
+    let nextId = this.state.nextDrugId;
+    newDrug = { ...newDrug, id: nextId };
+    nextId++;
+    this.setState({ nextDrugId: nextId });
+    this.state.drugs.push(newDrug);
+    this.setState({ page: '' });
   }
 
   addUserDrug = (newUserDrug) => {
@@ -37,6 +47,7 @@ class App extends Component {
   }
 
   updateUserDrug = (newUserDrug) => {
+    console.log(newUserDrug)
     let newUserDrugs = this.state.userDrugs.map((currentUserDrug) => {
       if (currentUserDrug.id === newUserDrug.id) {
         return newUserDrug;
@@ -44,13 +55,13 @@ class App extends Component {
       return currentUserDrug;
     });
     this.setState({ userDrugs: newUserDrugs });
-    this.state.page ==='edit' ? this.setState({page: ''}) : null ;
+    this.setState({ page: '' });
   }
 
   onUserDrugEdit = (userDrugToEdit) => {
     let newUserDrug = { ...userDrugToEdit, isEditing: true };
     this.updateUserDrug(newUserDrug);
-    this.setState({ page: 'edit'});
+    this.setState({ page: 'edit' });
   }
 
   onUserDrugDeleted = (userDrugToDelete) => {
@@ -87,15 +98,24 @@ class App extends Component {
     })
     if (drugFound) {
       return (
-        <UserDrugEdit getExpirationToShow={this.getExpirationDateToShow} drugEdited={this.updateUserDrug} drug={drugFound} />
+        <UserDrugEdit formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} drug={drugFound} />
       )
     }
     return
   }
 
+  formatDate(date) {
+    if (date !== null) {
+      let year = date.getFullYear();
+      let month = date.getMonth();
+      let day = date.getDate();
+      return year + '-' + month + '-' + day
+    }
+  }
+
   render() {
     if (this.state.page === 'addUserDrug') {
-      return <AddUserDrug addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
+      return <AddUserDrug formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
     }
     if (this.state.page === 'edit') {
       return this.checkIfEditWindow();
@@ -108,7 +128,7 @@ class App extends Component {
         </div>
         <div className='user-drugs'>
           <h1> here all your drugs</h1>
-          <UserDrugs userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
+          <UserDrugs formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
         </div>
         <div className='drugs-list'>
         </div>

@@ -7,20 +7,9 @@ export class UserDrugView extends React.Component {
     }
 
     checkIfOpenButton = () => {
-        if (!this.props.drug.isOpened) {
+        if (this.props.drug.isOpened === false) {
             return <button onClick={this.onOpened}>open</button>;
         }
-    }
-
-    format2Digits(num) {
-        return (num > 9 ? num : '0' + num)
-    }
-
-    formatDate(date) {
-        let year = date.getFullYear();
-        let month = this.format2Digits(date.getMonth());
-        let day = this.format2Digits(date.getDate());
-        return year + '-' + month + '-' + day
     }
 
     onOpened = () => {
@@ -47,7 +36,7 @@ export class UserDrugView extends React.Component {
         return (
             <tr>
                 <td> {this.props.drug.drugName}</td>
-                <td style={this.pickStyleColor()}> {this.formatDate(this.getExpirationToShow())} </td>
+                <td style={this.pickStyleColor()}> {this.props.formatDate(this.getExpirationToShow())} </td>
                 <td>
                     {this.checkIfOpenButton()}
                     <button onClick={this.onEdit}>edit</button>
