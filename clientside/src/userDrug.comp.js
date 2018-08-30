@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { UserDrugView } from './userDrugView.comp';
 export class UserDrugs extends React.Component {
-    
+
     render() {
         return <table>
             <thead>

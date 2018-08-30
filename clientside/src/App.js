@@ -3,7 +3,7 @@ import './App.css';
 import { UserDrugs } from './userDrug.comp';
 import { UserDrugEdit } from './userDrugEdit.comp';
 import { AddUserDrug } from './addUserDrug.comp';
-
+import { AddDrug } from './addDrug.comp';
 class App extends Component {
 
   state = {
@@ -47,7 +47,6 @@ class App extends Component {
   }
 
   updateUserDrug = (newUserDrug) => {
-    console.log(newUserDrug)
     let newUserDrugs = this.state.userDrugs.map((currentUserDrug) => {
       if (currentUserDrug.id === newUserDrug.id) {
         return newUserDrug;
@@ -85,27 +84,32 @@ class App extends Component {
     }
   }
 
-  getDaysAfterOpened = (drugToSearchName) => {
+  getDrugByName = (drugToSearchName) => {
     let drugFound = this.state.drugs.find((drugToCheck) => {
       return drugToCheck.name === drugToSearchName;
-    })
+    });
+    return drugFound;
+  }
+
+  getDaysAfterOpened = (drugToSearchName) => {
+    let drugFound = this.getDrugByName(drugToSearchName);
     return drugFound.daysAfterOpened;
   }
 
   checkIfEditWindow() {
-    let drugFound = this.state.userDrugs.find((drugToCheck) => {
-      return drugToCheck.isEditing === true;
+    let userDrugFound = this.state.userDrugs.find((userDrugToCheck) => {
+      return userDrugToCheck.isEditing === true;
     })
-    if (drugFound) {
+    if (userDrugFound) {
       return (
-        <UserDrugEdit formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} drug={drugFound} />
+        <UserDrugEdit formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} userDrug={userDrugFound} />
       )
     }
     return
   }
 
   formatDate(date) {
-    if (date !== null) {
+    if (date) {
       let year = date.getFullYear();
       let month = date.getMonth();
       let day = date.getDate();
@@ -116,6 +120,9 @@ class App extends Component {
   render() {
     if (this.state.page === 'addUserDrug') {
       return <AddUserDrug formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
+    }
+    if (this.state.page === 'addDrug') {
+      return <AddDrug getDrugByName={this.getDrugByName} addDrug={this.addDrug} drugsList={this.state.drugs} />
     }
     if (this.state.page === 'edit') {
       return this.checkIfEditWindow();
@@ -128,6 +135,8 @@ class App extends Component {
         </div>
         <div className='user-drugs'>
           <h1> here all your drugs</h1>
+          <button onClick={() => this.setState({ page: 'addUserDrug' })}> + </button>
+          <button onClick={() => this.setState({ page: 'addDrug' })}> add new drug </button>
           <UserDrugs formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
         </div>
         <div className='drugs-list'>

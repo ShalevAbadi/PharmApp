@@ -16,7 +16,7 @@ export class UserDrugForm extends React.Component {
     }
 
     handleSubmit = (event) => {
-        if (this.state.drugName === null) {
+        if (!this.state.drugName) {
             return alert("Choose drug name");
         }
         if (this.state.selectedExpirationDate === null) {
@@ -72,7 +72,8 @@ export class UserDrugForm extends React.Component {
                     <label>
                         Drug Name:
                          <Select
-                            vvalue={this.state.drugName}
+                            value={this.state.drugName}
+                            placeholder={this.state.drugName}
                             onChange={this.handleNameChange}
                             options={this.props.drugsList.map((drug) => {
                                 if (drug.daysAfterOpened === Infinity) {
