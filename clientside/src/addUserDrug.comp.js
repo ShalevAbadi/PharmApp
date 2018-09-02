@@ -10,7 +10,7 @@ export class AddUserDrug extends React.Component {
     }
 
     render() {
-        return <UserDrugForm formatDate={this.props.formatDate} drugsList={this.props.drugsList} callBack={this.props.addUserDrug} userDrug={this.state.userDrug} />
+        return <UserDrugForm returnHome={this.props.returnHome} formatDate={this.props.formatDate} drugsList={this.props.drugsList} callBack={this.props.addUserDrug} userDrug={this.state.userDrug} />
     }
 
 }

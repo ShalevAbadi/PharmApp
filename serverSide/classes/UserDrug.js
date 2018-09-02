@@ -1,31 +1,12 @@
 module.exports = class UserDrug {
 
-    constructor(id, user, drug, exp, dateOpened) {
+    constructor(id, user, drug, closedExpirationDate, dateOpened, isOpened, isDeleted) {
         this.id = id;
         this.user = user;
         this.drug = drug;
-        this.exp = exp;
+        this.closedExpirationDate = closedExpirationDate;
         this.dateOpened = dateOpened;
+        this.isOpened = isOpened;
+        this.isDeleted = isDeleted;
     }
-
-    getId() {
-        return this.id;
-    }
-
-    getUser() {
-        return this.user;
-    }
-
-    getDrug() {
-        return this.drug;
-    }
-
-    getExp() {
-        return this.exp;
-    }
-
-    getDateOpened() {
-        return this.dateOpened;
-    }
-
 }

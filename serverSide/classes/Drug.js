@@ -8,16 +8,4 @@ module.exports = class Drug {
         this.daysAfterOpened = daysAfterOpened;
     }
 
-    getId() {
-        return this.id;
-    }
-
-    getName() {
-        return this.name;
-    }
-
-    getDaysAfterOpened() {
-        return this.daysAfterOpened;
-    }
-
 };

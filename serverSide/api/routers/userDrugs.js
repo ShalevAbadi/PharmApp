@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const userDrugsHandlerReq = require('../../classes/UserDrugsHandler');
 const userDrugsHandler = new userDrugsHandlerReq();
 const UserDrug = require('../../classes/UserDrug');
@@ -20,19 +19,19 @@ router.get('/:userId', (req, res, next) => {
 router.post('/', (req, res, next) => {
     let user = new User(
         req.body.userId,
-        'user name check'
     );
     let drug = new Drug(
         req.body.drugId,
-        'drug name check',
-        165
     );
     let userDrug = new UserDrug(
         null,
         user,
         drug,
-        req.body.exp,
-        req.body.dateOpened
+        req.body.closedExpirationDate,
+        req.body.dateOpened,
+        req.body.isOpened,
+        req.body.isDeleted
+
     );
     userDrugsHandler.createUserDrug(userDrug).then(
         (result) => {
@@ -45,7 +44,12 @@ router.post('/', (req, res, next) => {
 
 router.patch('/:userDrugId', (req, res, next) => {
     let userDrugId = req.params.userDrugId;
-    userDrugsHandler.setUserDrugOpenedToday(userDrugId).then(
+    let drugId = req.body.drugId;
+    let closedExpirationDate = req.body.closedExpirationDate;
+    let dateOpened = req.body.dateOpened;
+    let isOpened = req.body.isOpened;
+    let isDeleted = req.body.isDeleted;
+    userDrugsHandler.updateUserDrug(userDrugId, drugId, closedExpirationDate, dateOpened, isOpened, isDeleted).then(
         (result) => {
             res.status(200).json(result);
         },

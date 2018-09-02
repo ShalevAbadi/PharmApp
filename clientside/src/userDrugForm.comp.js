@@ -16,20 +16,19 @@ export class UserDrugForm extends React.Component {
     }
 
     handleSubmit = (event) => {
+        event.preventDefault();
         if (!this.state.drugName) {
             return alert("Choose drug name");
         }
         if (this.state.selectedExpirationDate === null) {
             return alert("You didn't pick a date");
         }
-        let newUserDrug = { ...this.state.newUserDrug, drugName: this.state.drugName, closedExpirationDate: this.state.selectedExpirationDate, isOpened: this.state.isOpened };
+        let newUserDrug = { ...this.state.newUserDrug, drugName: this.state.drugName, closedExpirationDate: this.state.selectedExpirationDate, dateOpened: this.state.selectedDateOpened, isOpened: this.state.isOpened };
         if (newUserDrug.isOpened) {
             if (this.state.selectedDateOpened === null) {
                 return alert("You didn't pick an opening date");
             }
-            newUserDrug = { ...newUserDrug, dateOpened: this.state.selectedDateOpened }
         }
-        event.preventDefault();
         this.props.callBack(newUserDrug);
     }
 
@@ -57,10 +56,10 @@ export class UserDrugForm extends React.Component {
     showDateOpenedInput = () => {
         if (this.state.isOpened) {
             return (
-                <div>
+                <label>
                     <p>Date Opened:</p>
                     <DayPickerInput placeholder={this.props.formatDate(this.props.userDrug.dateOpened)} onDayChange={(date) => { this.handleDateOpenedChange(date) }} />
-                </div>
+                </label>
             );
         }
     }
@@ -100,6 +99,7 @@ export class UserDrugForm extends React.Component {
                     {this.showDateOpenedInput()}
                     <br />
                     <input type="submit" value="Submit" />
+                    <button onClick={this.props.returnHome}> cancel </button>
                 </form>
             </div>
         );

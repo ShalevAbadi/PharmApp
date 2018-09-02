@@ -8,6 +8,7 @@ export class AddDrug extends React.Component {
     }
 
     handleSubmit = (event) => {
+        event.preventDefault();
         let daysAfterOpened = this.refs.daysAfterOpened.value;
         daysAfterOpened = daysAfterOpened ? daysAfterOpened : Infinity;
         if (daysAfterOpened < 0) {
@@ -50,6 +51,7 @@ export class AddDrug extends React.Component {
                     <span> Days After Opened: </span>
                 </label>
                 <input type="submit" value="Submit" />
+                <button onClick={this.props.returnHome}> cancel </button>
             </form>
         );
 

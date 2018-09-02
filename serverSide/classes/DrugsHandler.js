@@ -8,33 +8,46 @@ module.exports = class DrugHandler {
 
     createDrugIfNotExist(drug) {
         return new Promise((resolve, reject) => {
-            this.getDrugByName(drug.getName()).then(
+            this.getDrugByName(drug.name).then(
                 (result) => {
                     if (!this.db.isResultEmpty(result)) {
                         resolve();
                     } else {
-                        this.createDrug(drug.getName(), drug.getDaysAfterOpened()).then((result) => {
-                           //let msg = result ? 'Drug created' : 'db error occured2';
-                            resolve (result);
+                        this.createDrug(drug.name, drug.daysAfterOpened).then((result) => {
+                            resolve(result);
                         }, (err) => {
-                            reject (err);
+                            reject(err);
                         })
 
                     }
                 },
                 (err) => {
-                    reject (err);
+                    reject(err);
                 });
         })
     }
 
     createDrug(name, daysAfterOpened) {
-        let sql = "INSERT INTO Drugs (DrugName, daysAfterOpened) VALUES ('" + name + "'," + daysAfterOpened + ")";
+        let sql = "INSERT INTO Drugs (name, daysAfterOpened) VALUES ('" + name + "'," + daysAfterOpened + ")";
         return this.db.runSQL(sql);
     }
 
+    getDrugs() {
+        let sql = "SELECT * FROM Drugs";
+        return new Promise((resolve, reject) => {
+            this.db.runSQL(sql).then((result) => {
+                console.log(result[0]);
+                resolve(result);
+            },
+                (err) => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
+    }
+
     getDrugByName(name) {
-        let sql = "SELECT * FROM Drugs WHERE DrugName='" + name + "'";
+        let sql = "SELECT * FROM Drugs WHERE name='" + name + "'";
         return new Promise((resolve, reject) => {
             this.db.runSQL(sql).then((result) => {
                 console.log(result[0]);

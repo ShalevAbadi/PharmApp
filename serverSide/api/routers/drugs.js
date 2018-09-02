@@ -42,5 +42,20 @@ router.get('/:drugId', (req, res, next) => {
     });
 });
 
+router.get('/', (req, res, next) => {
+    drugsHandler.getDrugs().then((result) => {
+        if (result) {
+            res.status(200).json(result);
+        }
+        else {
+            res.status(404).json({ message: "drugs not found" });
+        }
+    }, (err) => {
+        res.status(500).json({ error: err });
+    });
+});
+
+
+
 
 module.exports = router;

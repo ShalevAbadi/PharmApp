@@ -5,11 +5,4 @@ module.exports = class User {
         this.name = name;
     }
 
-    getId() {
-        return this.id;
-    }
-
-    getName() {
-        return this.name;
-    }
 };

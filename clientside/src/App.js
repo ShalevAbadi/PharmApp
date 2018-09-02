@@ -1,52 +1,111 @@
 import React, { Component } from 'react';
 import './App.css';
+import * as axios from 'axios';
 import { UserDrugs } from './userDrug.comp';
 import { UserDrugEdit } from './userDrugEdit.comp';
 import { AddUserDrug } from './addUserDrug.comp';
 import { AddDrug } from './addDrug.comp';
 class App extends Component {
+  componentWillMount = () => {
+    this.getDrugs();
+    this.getUserDrugs();
+  }
 
   state = {
     page: '',
     userName: 'userTest',
-    nextDrugId: 7,
-    nextUserDrugId: 4,
-    drugs: [
-      { id: 0, name: 'Acamol', daysAfterOpened: 10 },
-      { id: 1, name: 'Bcamol', daysAfterOpened: 6 },
-      { id: 2, name: 'Ccamol', daysAfterOpened: 0 },
-      { id: 3, name: 'Dcamol', daysAfterOpened: Infinity },
-      { id: 4, name: 'Ecamol', daysAfterOpened: 180 },
-      { id: 5, name: 'Fcamol', daysAfterOpened: 180 },
-      { id: 6, name: 'Gcamol', daysAfterOpened: 180 }
-    ],
-    userDrugs: [
-      { id: 0, userName: 'userTest', drugName: 'Acamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 90)), dateOpened: new Date(), isOpened: true, isDeleted: false, isEditing: false },
-      { id: 1, userName: 'userTest', drugName: 'Bcamol', closedExpirationDate: new Date((new Date()).getTime() - (86400000 * 90)), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false },
-      { id: 2, userName: 'userTest', drugName: 'Ccamol', closedExpirationDate: new Date((new Date()).getTime() + (86400000 * 100)), dateOpened: null, isOpened: false, isDeleted: false, isEditing: false },
-      { id: 3, userName: 'userTest', drugName: 'Dcamol', closedExpirationDate: new Date(), dateOpened: new Date(), isOpened: false, isDeleted: false, isEditing: false }
-    ]
+    userId: 1,
+    drugs: [],
+    userDrugs: []
+  }
+
+  getDrugs = () => {
+    axios.get('http://localhost:3001/drugs')
+      .then((response) => {
+        this.setState({ drugs: response.data });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  addDrugDB = (newDrug) => {
+    console.log(JSON.stringify(newDrug));
+    axios.post('http://localhost:3001/drugs', newDrug)
+      .then((response) => {
+        console.log(response);
+        this.getDrugs();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  getUserDrugs = () => {
+    axios.get('http://localhost:3001/userDrugs/' + this.state.userId)
+      .then((response) => {
+        let res = (response.data).map((userDrug) => {
+          let name = this.getDrugNameById(userDrug.drugId)
+          let closedExpirationDate = new Date(userDrug.closedExpirationDate);
+          let dateOpened = userDrug.dateOpened ? new Date(userDrug.dateOpened) : null;
+          let isOpened = userDrug.isOpened === 1 ? true : false;
+          let isDeleted = userDrug.isDeleted === 1 ? true : false;
+          userDrug = ({ ...userDrug, drugName: name, closedExpirationDate: closedExpirationDate, dateOpened: dateOpened, isEditing: false, isOpened: isOpened, isDeleted: isDeleted });
+          return userDrug;
+        })
+        this.setState({ userDrugs: res });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  addUserDrugDB = (userDrug) => {
+    axios.post('http://localhost:3001/userDrugs', userDrug)
+      .then((response) => {
+        console.log(response);
+        this.getUserDrugs();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  updateUserDrugDB = (userDrug) => {
+    userDrug = ({ ...userDrug, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: this.formatDate(userDrug.closedExpirationDate), dateOpened: this.formatDate(userDrug.dateOpened) });
+    console.log(JSON.stringify(userDrug));
+    axios.patch('http://localhost:3001/userDrugs/' + userDrug.id, userDrug)
+      .then((response) => {
+        console.log(response);
+        this.getUserDrugs();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  returnHome = () => {
+    this.setState({ page: '' });
   }
 
   addDrug = (newDrug) => {
-    let nextId = this.state.nextDrugId;
-    newDrug = { ...newDrug, id: nextId };
-    nextId++;
-    this.setState({ nextDrugId: nextId });
-    this.state.drugs.push(newDrug);
     this.setState({ page: '' });
+    this.addDrugDB(newDrug);
   }
 
-  addUserDrug = (newUserDrug) => {
-    let nextId = this.state.nextUserDrugId;
-    newUserDrug = { ...newUserDrug, id: nextId, isEditing: false };
-    nextId++;
-    this.setState({ nextUserDrugId: nextId });
-    this.state.userDrugs.push(newUserDrug);
+  addUserDrug = (userDrug) => {
+    userDrug = ({ ...userDrug, userId: this.state.userId, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: this.formatDate(userDrug.closedExpirationDate), dateOpened: this.formatDate(userDrug.dateOpened) });
     this.setState({ page: '' });
+    this.addUserDrugDB(userDrug);
   }
 
   updateUserDrug = (newUserDrug) => {
+    this.setState({ page: '' });
+    this.updateUserDrugDB(newUserDrug);
+  }
+
+  onUserDrugEdit = (userDrugToEdit) => {
+    let newUserDrug = { ...userDrugToEdit, isEditing: true };
     let newUserDrugs = this.state.userDrugs.map((currentUserDrug) => {
       if (currentUserDrug.id === newUserDrug.id) {
         return newUserDrug;
@@ -54,12 +113,6 @@ class App extends Component {
       return currentUserDrug;
     });
     this.setState({ userDrugs: newUserDrugs });
-    this.setState({ page: '' });
-  }
-
-  onUserDrugEdit = (userDrugToEdit) => {
-    let newUserDrug = { ...userDrugToEdit, isEditing: true };
-    this.updateUserDrug(newUserDrug);
     this.setState({ page: 'edit' });
   }
 
@@ -91,9 +144,26 @@ class App extends Component {
     return drugFound;
   }
 
+  getDrugById = (drugToSearchId) => {
+    let drugFound = this.state.drugs.find((drugToCheck) => {
+      return drugToCheck.id === drugToSearchId;
+    });
+    return drugFound;
+  }
+
+  getDrugNameById = (drugToSearchId) => {
+    let drugFound = this.getDrugById(drugToSearchId);
+    return (drugFound.name);
+  }
+
+  getDrugIdByName = (drugToSearchName) => {
+    let drugFound = this.getDrugByName(drugToSearchName);
+    return (drugFound.id);
+  }
+
   getDaysAfterOpened = (drugToSearchName) => {
     let drugFound = this.getDrugByName(drugToSearchName);
-    return drugFound.daysAfterOpened;
+    return (drugFound.daysAfterOpened);
   }
 
   checkIfEditWindow() {
@@ -102,10 +172,20 @@ class App extends Component {
     })
     if (userDrugFound) {
       return (
-        <UserDrugEdit formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} userDrug={userDrugFound} />
+        <UserDrugEdit returnHome={this.returnHome} formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} userDrug={userDrugFound} />
       )
     }
     return
+  }
+
+  getFrom = () => {
+    axios.get('http://localhost:3001/userDrugs/1')
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   formatDate(date) {
@@ -118,11 +198,14 @@ class App extends Component {
   }
 
   render() {
+    if (!this.state.drugs[0]) {
+      return <div><p>Loading</p></div>
+    }
     if (this.state.page === 'addUserDrug') {
-      return <AddUserDrug formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
+      return <AddUserDrug returnHome={this.returnHome} formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
     }
     if (this.state.page === 'addDrug') {
-      return <AddDrug getDrugByName={this.getDrugByName} addDrug={this.addDrug} drugsList={this.state.drugs} />
+      return <AddDrug returnHome={this.returnHome} getDrugByName={this.getDrugByName} addDrug={this.addDrug} drugsList={this.state.drugs} />
     }
     if (this.state.page === 'edit') {
       return this.checkIfEditWindow();
@@ -138,8 +221,6 @@ class App extends Component {
           <button onClick={() => this.setState({ page: 'addUserDrug' })}> + </button>
           <button onClick={() => this.setState({ page: 'addDrug' })}> add new drug </button>
           <UserDrugs formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
-        </div>
-        <div className='drugs-list'>
         </div>
       </div >
     );
