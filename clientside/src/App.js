@@ -45,7 +45,7 @@ class App extends Component {
     axios.get('http://localhost:3001/userDrugs/' + this.state.userId)
       .then((response) => {
         let res = (response.data).map((userDrug) => {
-          let name = this.getDrugNameById(userDrug.drugId)
+          let name = this.getDrugNameById(userDrug.drugId);
           let closedExpirationDate = new Date(userDrug.closedExpirationDate);
           let dateOpened = userDrug.dateOpened ? new Date(userDrug.dateOpened) : null;
           let isOpened = userDrug.isOpened === 1 ? true : false;
@@ -128,7 +128,7 @@ class App extends Component {
 
   getExpirationDateToShow = (userDrug) => {
     let daysAfterOpened = this.getDaysAfterOpened(userDrug.drugName);
-    if (daysAfterOpened === Infinity || !userDrug.isOpened) {
+    if (daysAfterOpened === null || !userDrug.isOpened) {
       return userDrug.closedExpirationDate;
     }
     if (userDrug.isOpened) {
@@ -139,7 +139,7 @@ class App extends Component {
 
   getDrugByName = (drugToSearchName) => {
     let drugFound = this.state.drugs.find((drugToCheck) => {
-      return drugToCheck.name === drugToSearchName;
+      return drugToCheck.name.toUpperCase() === drugToSearchName.toUpperCase();
     });
     return drugFound;
   }
