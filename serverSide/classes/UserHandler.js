@@ -22,7 +22,7 @@ module.exports = class UserHandler {
     createUserIfNotExist(user) {
         user.password = this.encryptPassword(user.password);
         return new Promise((resolve, reject) => {
-            this.getUserByName(user.userName).then(
+            this.checkIfEmailExist(user.email).then(
                 (result) => {
                     if (!this.db.isResultEmpty(result)) {
                         resolve();
@@ -43,9 +43,9 @@ module.exports = class UserHandler {
         })
     }
 
-    connectUser(userName, password) {
+    connectUser(email, password) {
         password = this.encryptPassword(password);
-        return this.getUserPassword(userName).then((result) => {
+        return this.getUserPassword(email).then((result) => {
             if (!(this.db.isResultEmpty(result))) {
                 return this.verifyConnection(result[0].Password, password);
             }
@@ -57,23 +57,7 @@ module.exports = class UserHandler {
 
     checkIfEmailExist(email) {
         let sql = "SELECT email FROM users WHERE email='" + email + "'";
-        return new Promise((resolve, reject) => {
-            (this.db.runSQL(sql).then(
-                (result) => {
-                    if (!this.db.isResultEmpty(result)) {
-                        resolve(result);
-                    }
-                    resolve();
-                }
-                ,
-                (err) => {
-                    reject(err);
-                })
-                ,
-                (err) => {
-                    reject(err);
-                });
-        })
+        return this.db.runSQL(sql);
     }
 
     encryptPassword(password) {
@@ -87,8 +71,8 @@ module.exports = class UserHandler {
         return (passToVar == validPass);
     }
 
-    getUserPassword(name) {
-        let sql = "SELECT Password FROM users WHERE UserName='" + name + "'";
+    getUserPassword(email) {
+        let sql = "SELECT Password FROM users WHERE email='" + email + "'";
         return this.db.runSQL(sql);
     }
 

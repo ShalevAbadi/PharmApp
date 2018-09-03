@@ -20,7 +20,9 @@ router.post('/signup', (req, res, next) => {
                 });
             }
             else {
-                res.status(200).json(result);
+                res.status(201).json({
+                    message: 'User created'
+                });
             }
         },
         (err) => {
@@ -31,13 +33,15 @@ router.post('/signup', (req, res, next) => {
 router.get('/signup/:email', (req, res, next) => {
     userHandler.checkIfEmailExist(req.params.email).then(
         (result) => {
-            if (!result) {
+            if (result) {
                 res.status(404).json({
-                    message: 'Email not found'
+                    message: 'Email alreay exist'
                 });
             }
             else {
-                res.status(200).json(result);
+                res.status(200).json({
+                    message: 'Email is good for use'
+                });
             }
         },
         (err) => {

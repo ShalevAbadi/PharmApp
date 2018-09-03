@@ -35,7 +35,9 @@ router.post('/', (req, res, next) => {
     );
     userDrugsHandler.createUserDrug(userDrug).then(
         (result) => {
-            res.status(200).json(result);
+            res.status(201).json({
+                message: 'Drug added'
+            });
         },
         (err) => {
             res.status(500).json({ error: err });

@@ -19,7 +19,9 @@ router.post('/', (req, res, next) => {
                 });
             }
             else {
-                res.status(200).json(result);
+                res.status(201).json({
+                    message: 'Drug created'
+                });
             }
         },
         (err) => {
