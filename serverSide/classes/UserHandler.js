@@ -19,29 +19,28 @@ module.exports = class UserHandler {
         });
     }
 
-    createUserIfNotExist(userName, password) {
-        password = this.encryptPassword(password);
-        return this.getUserByName(userName)
-            .then(
+    createUserIfNotExist(user) {
+        user.password = this.encryptPassword(user.password);
+        return new Promise((resolve, reject) => {
+            this.getUserByName(user.userName).then(
                 (result) => {
                     if (!this.db.isResultEmpty(result)) {
-                        return 'already exist';
+                        resolve();
                     } else {
-                        this.createUser(userName, password).then((result) => {
+                        this.createUser(user).then((result) => {
                             if (!this.db.isResultEmpty(result)) {
-                                return 'user created';
-                            } else {
-                                return 'error uccured';
+                                resolve(result);
                             }
                         },
                             (err) => {
-                                return err;
+                                reject(err);
                             })
                     }
                 },
                 (err) => {
-                    return err;
+                    reject(err);
                 });
+        })
     }
 
     connectUser(userName, password) {
@@ -54,6 +53,27 @@ module.exports = class UserHandler {
                 return false;
             }
         });
+    }
+
+    checkIfEmailExist(email) {
+        let sql = "SELECT email FROM users WHERE email='" + email + "'";
+        return new Promise((resolve, reject) => {
+            (this.db.runSQL(sql).then(
+                (result) => {
+                    if (!this.db.isResultEmpty(result)) {
+                        resolve(result);
+                    }
+                    resolve();
+                }
+                ,
+                (err) => {
+                    reject(err);
+                })
+                ,
+                (err) => {
+                    reject(err);
+                });
+        })
     }
 
     encryptPassword(password) {
@@ -73,17 +93,22 @@ module.exports = class UserHandler {
     }
 
     getUserById(userId) {
-        let sql = "SELECT * FROM users WHERE UserId='" + userId + "'";
+        let sql = "SELECT * FROM users WHERE userId='" + userId + "'";
         return this.db.runSQL(sql);
     }
 
     getUserByName(userName) {
-        let sql = "SELECT * FROM users WHERE UserName='" + userName + "'";
+        let sql = "SELECT * FROM users WHERE userName='" + userName + "'";
         return this.db.runSQL(sql);
     }
 
-    createUser(name, password) {
-        let sql = "INSERT INTO users (UserName, Password) VALUES ('" + name + "','" + password + "')";
+    createUser(user) {
+        return this.createUserDB(user.userName, user.password, user.email);
+    }
+
+    createUserDB(name, password, email) {
+        password = this.encryptPassword(password);
+        let sql = "INSERT INTO users (userName, password, email) VALUES ('" + name + "','" + password + "','" + email + "')";
         return this.db.runSQL(sql);
     }
 }

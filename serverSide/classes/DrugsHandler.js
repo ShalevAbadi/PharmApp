@@ -18,7 +18,6 @@ module.exports = class DrugHandler {
                         }, (err) => {
                             reject(err);
                         })
-
                     }
                 },
                 (err) => {
