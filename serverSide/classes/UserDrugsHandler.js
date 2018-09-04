@@ -11,7 +11,7 @@ module.exports = class UserDrugsHandler {
     }
 
     createUserDrugDB(userId, drugId, closedExpirationDate, dateOpened, isOpened, isDeleted) {
-        let sql = "INSERT INTO userdrugs (DrugId, UserId, closedExpirationDate, dateOpened, isOpened, isDeleted) VALUES (" + drugId + "," + userId + ",'" + closedExpirationDate + "','" + dateOpened + "'," + isOpened + "," + isDeleted + " )";
+        let sql = "INSERT INTO userdrugs (drugId, userId, closedExpirationDate, dateOpened, isOpened, isDeleted) VALUES (" + drugId + "," + userId + ",'" + closedExpirationDate + "','" + dateOpened + "'," + isOpened + "," + isDeleted + " )";
         return this.db.runSQL(sql);
     }
 
@@ -45,10 +45,28 @@ module.exports = class UserDrugsHandler {
 
     getUserDrugUserId(userDrugId) {
         let sql = "SELECT userId FROM userdrugs WHERE id='" + userDrugId + "'";
-        return this.db.runSQL(sql);
+        return new Promise((resolve, reject) => {
+            this.db.runSQL(sql).then((result) => {
+                if (!this.db.isResultEmpty(result)) {
+                    console.log(result)
+                    resolve(result[0].userId);
+                }
+                else {
+                    console.log("user drug not found");
+                }
+            }, (err) => {
+                console.log(err);
+            })
+        });
     }
 
     validateItIsTheSameUser(userDrugId, userId) {
-        return (getUserDrugUserId(userDrugId) === userId);
+        return new Promise((resolve, reject) => {
+            this.getUserDrugUserId(userDrugId).then((result) => {
+                console.log(result)
+                resolve(result === userId);
+
+            })
+        })
     }
-};
+}

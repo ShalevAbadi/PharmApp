@@ -6,6 +6,7 @@ const UserDrug = require('../../classes/UserDrug');
 const Drug = require('../../classes/Drug');
 const User = require('../../classes/User');
 const checkAuth = require('../middleware/check-auth');
+const userDrugAuth = require('../middleware/userDrugAuth');
 
 router.get('/', checkAuth, (req, res, next) => {
     let userId = req.userData.userId
@@ -32,7 +33,6 @@ router.post('/', checkAuth, (req, res, next) => {
         req.body.dateOpened,
         req.body.isOpened,
         req.body.isDeleted
-
     );
     userDrugsHandler.createUserDrug(userDrug).then(
         (result) => {
@@ -45,9 +45,8 @@ router.post('/', checkAuth, (req, res, next) => {
         });
 });
 
-router.patch('/:userDrugId', checkAuth, (req, res, next) => {
+router.patch('/:userDrugId', checkAuth, userDrugAuth, (req, res, next) => {
     let userDrugId = req.params.userDrugId;
-    validateItIsTheSameUser(userDrugId, req.userData.userId);
     let drugId = req.body.drugId;
     let closedExpirationDate = req.body.closedExpirationDate;
     let dateOpened = req.body.dateOpened;
@@ -62,9 +61,8 @@ router.patch('/:userDrugId', checkAuth, (req, res, next) => {
         });
 });
 
-router.delete('/:userDrugId', checkAuth, (req, res, next) => {
+router.delete('/:userDrugId', checkAuth, userDrugAuth, (req, res, next) => {
     let userDrugId = req.params.userDrugId;
-    validateItIsTheSameUser(userDrugId, req.userData.userId);
     userDrugsHandler.deleteUserDrug(userDrugId).then(
         (result) => {
             res.status(200).json(result);
@@ -73,5 +71,6 @@ router.delete('/:userDrugId', checkAuth, (req, res, next) => {
             res.status(500).json({ error: err });
         });
 });
+
 
 module.exports = router;
