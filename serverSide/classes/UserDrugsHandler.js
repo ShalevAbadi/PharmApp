@@ -34,7 +34,7 @@ module.exports = class UserDrugsHandler {
     }
 
     getUserDrugs(userId) {
-        let sql = "SELECT * FROM userdrugs WHERE UserId='" + userId + "'";
+        let sql = "SELECT * FROM userdrugs WHERE userId='" + userId + "'";
         return this.db.runSQL(sql);
     }
 
@@ -43,4 +43,12 @@ module.exports = class UserDrugsHandler {
         return this.db.runSQL(sql);
     }
 
+    getUserDrugUserId(userDrugId) {
+        let sql = "SELECT userId FROM userdrugs WHERE id='" + userDrugId + "'";
+        return this.db.runSQL(sql);
+    }
+
+    validateItIsTheSameUser(userDrugId, userId) {
+        return (getUserDrugUserId(userDrugId) === userId);
+    }
 };

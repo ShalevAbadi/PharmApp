@@ -5,9 +5,10 @@ const userDrugsHandler = new userDrugsHandlerReq();
 const UserDrug = require('../../classes/UserDrug');
 const Drug = require('../../classes/Drug');
 const User = require('../../classes/User');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/:userId', (req, res, next) => {
-    let userId = req.params.userId;
+router.get('/', checkAuth, (req, res, next) => {
+    let userId = req.userData.userId
     userDrugsHandler.getUserDrugs(userId).then((result) => {
         res.status(200).json(result);
     },
@@ -16,9 +17,9 @@ router.get('/:userId', (req, res, next) => {
         })
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     let user = new User(
-        req.body.userId,
+        req.userData.userId
     );
     let drug = new Drug(
         req.body.drugId,
@@ -44,8 +45,9 @@ router.post('/', (req, res, next) => {
         });
 });
 
-router.patch('/:userDrugId', (req, res, next) => {
+router.patch('/:userDrugId', checkAuth, (req, res, next) => {
     let userDrugId = req.params.userDrugId;
+    validateItIsTheSameUser(userDrugId, req.userData.userId);
     let drugId = req.body.drugId;
     let closedExpirationDate = req.body.closedExpirationDate;
     let dateOpened = req.body.dateOpened;
@@ -60,8 +62,9 @@ router.patch('/:userDrugId', (req, res, next) => {
         });
 });
 
-router.delete('/:userDrugId', (req, res, next) => {
+router.delete('/:userDrugId', checkAuth, (req, res, next) => {
     let userDrugId = req.params.userDrugId;
+    validateItIsTheSameUser(userDrugId, req.userData.userId);
     userDrugsHandler.deleteUserDrug(userDrugId).then(
         (result) => {
             res.status(200).json(result);

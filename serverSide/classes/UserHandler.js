@@ -20,7 +20,6 @@ module.exports = class UserHandler {
     }
 
     createUserIfNotExist(user) {
-        user.password = this.encryptPassword(user.password);
         return new Promise((resolve, reject) => {
             this.checkIfEmailExist(user.email).then(
                 (result) => {
@@ -43,15 +42,27 @@ module.exports = class UserHandler {
         })
     }
 
-    connectUser(email, password) {
+    connectUser(user) {
+        return this.connectUserDB(user.email, user.password);
+    }
+
+    connectUserDB(email, password) {
         password = this.encryptPassword(password);
-        return this.getUserPassword(email).then((result) => {
-            if (!(this.db.isResultEmpty(result))) {
-                return this.verifyConnection(result[0].Password, password);
+        return new Promise((resolve, reject) => {
+            this.getUserByEmail(email).then((result) => {
+                if (!(this.db.isResultEmpty(result))) {
+                    if (this.verifyConnection(result[0].password, password)) {
+                        resolve(result[0]);
+                    }
+                    resolve(false);
+                }
+                else {
+                    resolve(false);
+                }
+            }, (err) => {
+                reject(err);
             }
-            else {
-                return false;
-            }
+            );
         });
     }
 
@@ -72,7 +83,7 @@ module.exports = class UserHandler {
     }
 
     getUserPassword(email) {
-        let sql = "SELECT Password FROM users WHERE email='" + email + "'";
+        let sql = "SELECT password FROM users WHERE email='" + email + "'";
         return this.db.runSQL(sql);
     }
 
@@ -81,8 +92,8 @@ module.exports = class UserHandler {
         return this.db.runSQL(sql);
     }
 
-    getUserByName(userName) {
-        let sql = "SELECT * FROM users WHERE userName='" + userName + "'";
+    getUserByEmail(email) {
+        let sql = "SELECT * FROM users WHERE email='" + email + "'";
         return this.db.runSQL(sql);
     }
 

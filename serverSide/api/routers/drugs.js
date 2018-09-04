@@ -4,8 +4,9 @@ const router = express.Router();
 const drugsHandlerReq = require('../../classes/DrugsHandler');
 const drugsHandler = new drugsHandlerReq();
 const Drug = require('../../classes/Drug');
+const checkAuth = require('../middleware/check-auth');
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     let drug = new Drug(
         null,
         req.body.name,
@@ -15,12 +16,12 @@ router.post('/', (req, res, next) => {
         (result) => {
             if (!result) {
                 res.status(404).json({
-                    message: 'Drug already exist'
+                    message: 'Drug already exist',
                 });
             }
             else {
                 res.status(201).json({
-                    message: 'Drug created'
+                    message: 'Drug created',
                 });
             }
         },
