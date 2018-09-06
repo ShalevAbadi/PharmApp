@@ -5,22 +5,38 @@ import { UserDrugs } from './userDrug.comp';
 import { UserDrugEdit } from './userDrugEdit.comp';
 import { AddUserDrug } from './addUserDrug.comp';
 import { AddDrug } from './addDrug.comp';
+import { Login } from './login.comp';
 class App extends Component {
   componentWillMount = () => {
-    this.getDrugs();
-    this.getUserDrugs();
+    //this.getDrugs();
+    //this.getUserDrugs();
   }
 
   state = {
     page: '',
     userName: 'userTest',
+    headers: '',
     userId: 1,
     drugs: [],
     userDrugs: []
   }
 
+  login = (loginData) => {
+    axios.post('http://localhost:3001/user/login/', loginData)
+      .then((response) => {
+        console.log(response.data.token)
+        this.setState({ headers: { headers: { Authorization: "Bearer " + response.data.token } } })
+        console.log(this.state.headers);
+        this.getDrugs();
+        this.getUserDrugs();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   getDrugs = () => {
-    axios.get('http://localhost:3001/drugs')
+    axios.get('http://localhost:3001/drugs', this.state.headers)
       .then((response) => {
         this.setState({ drugs: response.data });
       })
@@ -31,7 +47,7 @@ class App extends Component {
 
   addDrugDB = (newDrug) => {
     console.log(JSON.stringify(newDrug));
-    axios.post('http://localhost:3001/drugs', newDrug)
+    axios.post('http://localhost:3001/drugs', newDrug, this.state.headers)
       .then((response) => {
         console.log(response);
         this.getDrugs();
@@ -42,7 +58,7 @@ class App extends Component {
   }
 
   getUserDrugs = () => {
-    axios.get('http://localhost:3001/userDrugs/' + this.state.userId)
+    axios.get('http://localhost:3001/userDrugs/', this.state.headers)
       .then((response) => {
         let res = (response.data).map((userDrug) => {
           let name = this.getDrugNameById(userDrug.drugId);
@@ -61,9 +77,8 @@ class App extends Component {
   }
 
   addUserDrugDB = (userDrug) => {
-    axios.post('http://localhost:3001/userDrugs', userDrug)
+    axios.post('http://localhost:3001/userDrugs', userDrug, this.state.headers)
       .then((response) => {
-        console.log(response);
         this.getUserDrugs();
       })
       .catch(function (error) {
@@ -74,7 +89,7 @@ class App extends Component {
   updateUserDrugDB = (userDrug) => {
     userDrug = ({ ...userDrug, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: this.formatDate(userDrug.closedExpirationDate), dateOpened: this.formatDate(userDrug.dateOpened) });
     console.log(JSON.stringify(userDrug));
-    axios.patch('http://localhost:3001/userDrugs/' + userDrug.id, userDrug)
+    axios.patch('http://localhost:3001/userDrugs/' + userDrug.id, userDrug, this.state.headers)
       .then((response) => {
         console.log(response);
         this.getUserDrugs();
@@ -178,16 +193,6 @@ class App extends Component {
     return
   }
 
-  getFrom = () => {
-    axios.get('http://localhost:3001/userDrugs/1')
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   formatDate(date) {
     if (date) {
       let year = date.getFullYear();
@@ -199,7 +204,8 @@ class App extends Component {
 
   render() {
     if (!this.state.drugs[0]) {
-      return <div><p>Loading</p></div>
+      return <Login onSubmit={this.login} />
+      //return <div><p>Loading</p></div>
     }
     if (this.state.page === 'addUserDrug') {
       return <AddUserDrug returnHome={this.returnHome} formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />

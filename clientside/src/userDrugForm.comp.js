@@ -20,14 +20,12 @@ export class UserDrugForm extends React.Component {
         if (!this.state.drugName) {
             return alert("Choose drug name");
         }
-        if (this.state.selectedExpirationDate === null) {
+        if (!this.state.selectedExpirationDate) {
             return alert("You didn't pick a date");
         }
         let newUserDrug = { ...this.state.newUserDrug, drugName: this.state.drugName, closedExpirationDate: this.state.selectedExpirationDate, dateOpened: this.state.selectedDateOpened, isOpened: this.state.isOpened };
-        if (newUserDrug.isOpened) {
-            if (this.state.selectedDateOpened === null) {
-                return alert("You didn't pick an opening date");
-            }
+        if (newUserDrug.isOpened && (!this.state.selectedDateOpened)) {
+            return alert("You didn't pick an opening date");
         }
         this.props.callBack(newUserDrug);
     }

@@ -45,7 +45,7 @@ router.post('/', checkAuth, (req, res, next) => {
         });
 });
 
-router.patch('/:userDrugId', checkAuth, userDrugAuth, (req, res, next) => {
+router.patch('/:userDrugId', checkAuth, userDrugAuth,(req, res, next) => {
     let userDrugId = req.params.userDrugId;
     let drugId = req.body.drugId;
     let closedExpirationDate = req.body.closedExpirationDate;
@@ -54,7 +54,9 @@ router.patch('/:userDrugId', checkAuth, userDrugAuth, (req, res, next) => {
     let isDeleted = req.body.isDeleted;
     userDrugsHandler.updateUserDrug(userDrugId, drugId, closedExpirationDate, dateOpened, isOpened, isDeleted).then(
         (result) => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'User drug udated'
+            });
         },
         (err) => {
             res.status(500).json({ error: err });
@@ -65,7 +67,9 @@ router.delete('/:userDrugId', checkAuth, userDrugAuth, (req, res, next) => {
     let userDrugId = req.params.userDrugId;
     userDrugsHandler.deleteUserDrug(userDrugId).then(
         (result) => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'User drug deleted'
+            });
         },
         (err) => {
             res.status(500).json({ error: err });
