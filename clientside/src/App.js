@@ -6,27 +6,70 @@ import { UserDrugEdit } from './userDrugEdit.comp';
 import { AddUserDrug } from './addUserDrug.comp';
 import { AddDrug } from './addDrug.comp';
 import { Login } from './login.comp';
+import { Signup } from './signup.comp';
+
+const Promise = require('promise');
 class App extends Component {
-  componentWillMount = () => {
-    //this.getDrugs();
-    //this.getUserDrugs();
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: '',
+      userName: '',
+      userId: '',
+      drugs: [],
+      userDrugs: []
+    }
   }
 
-  state = {
-    page: '',
-    userName: 'userTest',
-    headers: '',
-    userId: 1,
-    drugs: [],
-    userDrugs: []
+  componentWillMount = () => {
+    this.setToken().then((result) => {
+      this.validateLogin().then((result) => {
+        if (result) {
+          this.getDrugs();
+          this.getUserDrugs();
+        }
+      });
+    })
+
+  }
+
+  setToken = () => {
+    return new Promise((resolve, reject) => {
+      if (localStorage.getItem('token') !== '') {
+        resolve(this.setState({ token: { headers: { Authorization: "Bearer " + localStorage.getItem('token') } } }));
+      }
+      else {
+        resolve()
+      }
+    });
+  }
+
+  validateLogin = () => {
+    return new Promise((resolve, reject) => {
+      if (this.state.token) {
+        return axios.post('http://localhost:3001/user/validateLogin', null, this.state.token)
+          .then((response) => {
+            if (response.status === 200) {
+              resolve(true);
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+      this.localStorage.setItem('token', '');
+      this.setState({ token: '' });
+      reject();
+    });
   }
 
   login = (loginData) => {
     axios.post('http://localhost:3001/user/login/', loginData)
       .then((response) => {
-        console.log(response.data.token)
-        this.setState({ headers: { headers: { Authorization: "Bearer " + response.data.token } } })
-        console.log(this.state.headers);
+        this.setState({ page: '' })
+        this.setState({ toekn: { headers: { Authorization: "Bearer " + response.data.token } } })
+        localStorage.setItem('token', response.data.token);
         this.getDrugs();
         this.getUserDrugs();
       })
@@ -35,8 +78,19 @@ class App extends Component {
       });
   }
 
+  logout = () => {
+    localStorage.setItem('token', '');
+    this.setState({
+      page: '',
+      userName: '',
+      userId: '',
+      drugs: [],
+      userDrugs: []
+    });
+  }
+
   getDrugs = () => {
-    axios.get('http://localhost:3001/drugs', this.state.headers)
+    axios.get('http://localhost:3001/drugs', { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
       .then((response) => {
         this.setState({ drugs: response.data });
       })
@@ -47,7 +101,7 @@ class App extends Component {
 
   addDrugDB = (newDrug) => {
     console.log(JSON.stringify(newDrug));
-    axios.post('http://localhost:3001/drugs', newDrug, this.state.headers)
+    axios.post('http://localhost:3001/drugs', newDrug, { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
       .then((response) => {
         console.log(response);
         this.getDrugs();
@@ -58,7 +112,7 @@ class App extends Component {
   }
 
   getUserDrugs = () => {
-    axios.get('http://localhost:3001/userDrugs/', this.state.headers)
+    axios.get('http://localhost:3001/userDrugs/', { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
       .then((response) => {
         let res = (response.data).map((userDrug) => {
           let name = this.getDrugNameById(userDrug.drugId);
@@ -77,7 +131,7 @@ class App extends Component {
   }
 
   addUserDrugDB = (userDrug) => {
-    axios.post('http://localhost:3001/userDrugs', userDrug, this.state.headers)
+    axios.post('http://localhost:3001/userDrugs', userDrug, { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
       .then((response) => {
         this.getUserDrugs();
       })
@@ -86,12 +140,19 @@ class App extends Component {
       });
   }
 
+  signupDB = (user) => {
+    axios.post('http://localhost:3001/user/signup', user).then((response) => {
+      this.login(user);
+    })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   updateUserDrugDB = (userDrug) => {
     userDrug = ({ ...userDrug, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: this.formatDate(userDrug.closedExpirationDate), dateOpened: this.formatDate(userDrug.dateOpened) });
-    console.log(JSON.stringify(userDrug));
-    axios.patch('http://localhost:3001/userDrugs/' + userDrug.id, userDrug, this.state.headers)
+    axios.patch('http://localhost:3001/userDrugs/' + userDrug.id, userDrug, { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
       .then((response) => {
-        console.log(response);
         this.getUserDrugs();
       })
       .catch(function (error) {
@@ -100,7 +161,7 @@ class App extends Component {
   }
 
   returnHome = () => {
-    this.setState({ page: '' });
+    this.changePage('');
   }
 
   addDrug = (newDrug) => {
@@ -150,6 +211,17 @@ class App extends Component {
       let openedExpirationDate = new Date(userDrug.dateOpened + (86400000 * daysAfterOpened));
       return userDrug.closedExpirationDate <= openedExpirationDate ? userDrug.closedExpirationDate : openedExpirationDate;
     }
+  }
+
+  changePage = (pageName) => {
+    this.setState({ page: pageName });
+  }
+
+  validateEmail = (email) => {
+    if (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(email)) {
+      return (true)
+    }
+    return (false)
   }
 
   getDrugByName = (drugToSearchName) => {
@@ -203,9 +275,14 @@ class App extends Component {
   }
 
   render() {
+    if (this.state.page === 'signup') {
+      return <Signup signup={this.signupDB} validateEmail={this.validateEmail} returnHome={this.returnHome} />
+    }
+    if (localStorage.getItem('token') === '') {
+      return <Login onSubmit={this.login} changePage={this.changePage} />
+    }
     if (!this.state.drugs[0]) {
-      return <Login onSubmit={this.login} />
-      //return <div><p>Loading</p></div>
+      return <div><p>Loading</p></div>
     }
     if (this.state.page === 'addUserDrug') {
       return <AddUserDrug returnHome={this.returnHome} formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
@@ -219,13 +296,14 @@ class App extends Component {
     return (
       < div >
         <div className='user-welcome'>
-          <h1>Hello {this.props.user.name}</h1>
+          <h1>Hello {this.state.userName}</h1>
           <p> you logged at {this.props.user.loggedAt.toString()}</p>
         </div>
         <div className='user-drugs'>
           <h1> here all your drugs</h1>
-          <button onClick={() => this.setState({ page: 'addUserDrug' })}> + </button>
-          <button onClick={() => this.setState({ page: 'addDrug' })}> add new drug </button>
+          <button onClick={() => this.changePage('addUserDrug')}> add to your list </button>
+          <button onClick={() => this.changePage('addDrug')}> add new drug </button>
+          <button onClick={this.logout}> logout </button>
           <UserDrugs formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
         </div>
       </div >

@@ -6,9 +6,10 @@ const bodyParser = require('body-parser');
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+const userAuthMiddleWare = require('../api/middleware/check-auth');
 const drugRouter = require('../api/routers/drugs');
 const userDrugsRouter = require('../api/routers/userDrugs');
-const userRouter = require('../api/routers/user');
+const userRouter = require('../api/routers/user/User');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/auth', userAuthMiddleWare);
 app.use('/drugs', drugRouter);
 app.use('/userDrugs', userDrugsRouter);
 app.use('/user', userRouter);

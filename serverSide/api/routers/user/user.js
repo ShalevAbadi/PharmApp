@@ -2,9 +2,19 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const userHandlerReq = require('../../classes/UserHandler');
+const checkAuth = require('../../middleware/check-auth');
+const userHandlerReq = require('../../../classes/UserHandler');
 const userHandler = new userHandlerReq();
-const User = require('../../classes/User');
+const User = require('../../../classes/User');
+const signUp = require('./signUp');
+const login = require('./login');
+
+router.post('/validateLogin', checkAuth, (req, res, next) => {
+    res.status(200).json({
+        auth: true
+    });
+
+});
 
 router.post('/login', (req, res, next) => {
     let user = new User(
@@ -54,6 +64,7 @@ router.post('/signup', (req, res, next) => {
         req.body.userName,
         req.body.password,
         req.body.email
+
     )
     if (validateEmail(user.email === false)) {
         res.status(404).json({
