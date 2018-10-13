@@ -23,14 +23,20 @@ class App extends Component {
   }
 
   componentWillMount = () => {
+    //localStorage.setItem('token', '123');
     this.setToken().then((result) => {
       this.validateLogin().then((result) => {
         if (result) {
           this.getDrugs();
           this.getUserDrugs();
         }
-      });
-    })
+        else {
+          this.logout();
+        }
+      }).catch((error) => {
+        this.logout();
+      })
+    });
 
   }
 
@@ -56,6 +62,7 @@ class App extends Component {
           })
           .catch(function (error) {
             console.log(error);
+            resolve();
           });
       }
       this.localStorage.setItem('token', '');
@@ -83,6 +90,7 @@ class App extends Component {
     this.setState({
       page: '',
       userName: '',
+      token: '',
       userId: '',
       drugs: [],
       userDrugs: []
@@ -90,7 +98,7 @@ class App extends Component {
   }
 
   getDrugs = () => {
-    axios.get('http://localhost:3001/drugs', { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
+    axios.get('http://localhost:3001/drugs', this.state.token)
       .then((response) => {
         this.setState({ drugs: response.data });
       })
