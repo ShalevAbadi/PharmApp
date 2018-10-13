@@ -15,7 +15,6 @@ class App extends Component {
     super(props);
     this.state = {
       page: '',
-      userName: '',
       userId: '',
       drugs: [],
       userDrugs: []
@@ -23,7 +22,6 @@ class App extends Component {
   }
 
   componentWillMount = () => {
-    //localStorage.setItem('token', '123');
     this.setToken().then((result) => {
       this.validateLogin().then((result) => {
         if (result) {
@@ -90,7 +88,6 @@ class App extends Component {
     localStorage.setItem('token', '');
     this.setState({
       page: '',
-      userName: '',
       token: '',
       userId: '',
       drugs: [],
@@ -303,13 +300,7 @@ class App extends Component {
       return this.checkIfEditWindow();
     }
     return (
-        <div className='user-drugs'>
-          <h1> Drugs list</h1>
-          <button onClick={() => this.changePage('addUserDrug')}> add to your list </button>
-          <button onClick={() => this.changePage('addDrug')}> add new drug </button>
-          <button onClick={this.logout}> logout </button>
-          <UserDrugs formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
-        </div>
+        <UserDrugs logout={this.logout} changePage= {this.changePage} formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
     );
   }
 }
