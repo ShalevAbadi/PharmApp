@@ -82,6 +82,7 @@ class App extends Component {
       })
       .catch(function (error) {
         console.log(error);
+        alert("Email or password incorrect");
       });
   }
 
@@ -302,19 +303,13 @@ class App extends Component {
       return this.checkIfEditWindow();
     }
     return (
-      < div >
-        <div className='user-welcome'>
-          <h1>Hello {this.state.userName}</h1>
-          <p> you logged at {this.props.user.loggedAt.toString()}</p>
-        </div>
         <div className='user-drugs'>
-          <h1> here all your drugs</h1>
+          <h1> Drugs list</h1>
           <button onClick={() => this.changePage('addUserDrug')}> add to your list </button>
           <button onClick={() => this.changePage('addDrug')}> add new drug </button>
           <button onClick={this.logout}> logout </button>
           <UserDrugs formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
         </div>
-      </div >
     );
   }
 }
