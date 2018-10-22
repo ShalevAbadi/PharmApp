@@ -1,0 +1,20 @@
+@import url(https://fonts.googleapis.com/css?family=Bangers);
+h1 {
+    text-align: center;
+    font-weight: normal;
+    color: #0000;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-size: 70px;
+    z-index: 1000;
+    font-family: 'Bangers', cursive;
+    text-shadow: 5px 5px 0 rgba(0, 0, 0);
+   
+  }
+
+.drugListNavButtons{
+    width: 50%;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import './style-sheets/userDrug.css';
 export class UserDrugView extends React.Component {
     
     getExpirationToShow = () => {
@@ -28,15 +28,15 @@ export class UserDrugView extends React.Component {
         return (this.getExpirationToShow() <= new Date())
     }
 
-    pickStyleColor = () => {
-        return { color: (this.checkExpired() ? 'red' : 'green') };
+    pickClassName = () => {
+        return (this.checkExpired() ? 'expired' : 'valid') ;
     }
 
     render() {
         return (
             <tr>
                 <td> {this.props.drug.drugName}</td>
-                <td style={this.pickStyleColor()}> {this.props.formatDate(this.getExpirationToShow())} </td>
+                <td className={this.pickClassName()}> {this.props.formatDate(this.getExpirationToShow())} </td>
                 <td>
                     {this.checkIfOpenButton()}
                     <button onClick={this.onEdit}>edit</button>

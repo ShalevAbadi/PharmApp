@@ -7,6 +7,7 @@ import { AddUserDrug } from './addUserDrug.comp';
 import { AddDrug } from './addDrug.comp';
 import { Login } from './login.comp';
 import { Signup } from './signup.comp';
+import './style-sheets/buttons.css'
 
 const Promise = require('promise');
 class App extends Component {
@@ -300,7 +301,7 @@ class App extends Component {
       return this.checkIfEditWindow();
     }
     return (
-        <UserDrugs logout={this.logout} changePage= {this.changePage} formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
+      <UserDrugs logout={this.logout} changePage={this.changePage} formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
     );
   }
 }

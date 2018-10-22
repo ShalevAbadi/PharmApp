@@ -1,14 +1,19 @@
 import * as React from 'react';
 import { UserDrugView } from './userDrugView.comp';
+import './style-sheets/userDrugsTable.css';
+import './style-sheets/userDrugsList.css'
+
 export class UserDrugs extends React.Component {
 
     render() {
-        return <div className='user-drugs'>
+        return <div className='userDrugs'>
             <h1> Drugs list</h1>
+            <div className="drugListNavButtons">
             <button onClick={() => this.props.changePage('addUserDrug')}> add to your list </button>
             <button onClick={() => this.props.changePage('addDrug')}> add new drug </button>
             <button onClick={this.props.logout}> logout </button>
-            <table>
+            </div>
+            <table className='userDrugsTable'>
                 <thead>
                     <tr>
                         <th>Drug Name</th>

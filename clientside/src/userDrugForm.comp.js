@@ -79,7 +79,6 @@ export class UserDrugForm extends React.Component {
                                 return { value: drug.name, label: drug.name + ", expires " + drug.daysAfterOpened + " days after opening" };
                             })}
                         />
-
                     </label>
                     <br />
                     <label>
@@ -96,7 +95,7 @@ export class UserDrugForm extends React.Component {
                     <br />
                     {this.showDateOpenedInput()}
                     <br />
-                    <input type="submit" value="Submit" />
+                    <button type="submit" value="Submit"> Submit</button>
                     <button onClick={this.props.returnHome}> cancel </button>
                 </form>
             </div>
