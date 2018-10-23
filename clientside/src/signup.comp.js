@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import './style-sheets/signup/signup.css'
 export class Signup extends React.Component {
 
     validateEmail = (email) => {
@@ -26,14 +26,18 @@ export class Signup extends React.Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" placeholder="Email adress" ref="email" />
-                    <input type="text" placeholder="Your name" ref="userName" />
-                    <input type="password" placeholder="Password (8-12 chars)" ref="password" />
-                    <input type="submit" value="Submit" />
-                </form>
-                <button onClick={this.props.returnHome}> cancel </button>
+            <div id='signup-box'>
+                <h1>Sign up</h1>
+                
+                <div id='signup'>
+                    <form onSubmit={this.handleSubmit}>
+                        <input type="text" placeholder="Email adress" ref="email" />
+                        <input type="text" placeholder="Your name" ref="userName" />
+                        <input type="password" placeholder="Password (8-12 chars)" ref="password" />
+                        <button type="submit" value="Submit"> Submit</button>
+                    </form>
+                    <button onClick={this.props.returnHome}> cancel </button>
+                </div>
             </div>
         );
     };

@@ -50,7 +50,7 @@ export class AddDrug extends React.Component {
                     <input type="number" ref="daysAfterOpened" />
                     <span> Days After Opened: </span>
                 </label>
-                <input type="submit" value="Submit" />
+                <button type="submit" value="Submit"> Submit</button>
                 <button onClick={this.props.returnHome}> cancel </button>
             </form>
         );

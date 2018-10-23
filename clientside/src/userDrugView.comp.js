@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './style-sheets/userDrug.css';
+import './style-sheets/userDrugsList/userDrug.css';
 export class UserDrugView extends React.Component {
     
     getExpirationToShow = () => {
