@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import './style-sheets/login/login.css'
 
 export class Login extends React.Component {
 
@@ -25,13 +25,16 @@ export class Login extends React.Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.onSubmit}>
-                    <input type="text" placeholder="Email" ref="email" />
-                    <input type="password" placeholder="Password" ref="password" />
-                    <button type="submit" value="Submit"> Submit</button>
-                </form>
-                <p onClick={this.onSignup}>not a user? signup</p>
+            <div id='login-box'>
+                <div id='login'>
+                    <h1>Sign in</h1>
+                    <form onSubmit={this.onSubmit}>
+                        <input type="text" placeholder="Email" ref="email" />
+                        <input type="password" placeholder="Password" ref="password" />
+                        <button type="submit" value="Submit"> Submit</button>
+                    </form>
+                    <p onClick={this.onSignup}>not a user? signup</p>
+                </div>
             </div>
         );
     }

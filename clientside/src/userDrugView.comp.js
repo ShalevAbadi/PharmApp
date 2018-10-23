@@ -34,15 +34,15 @@ export class UserDrugView extends React.Component {
 
     render() {
         return (
-            <tr>
-                <td> {this.props.drug.drugName}</td>
-                <td className={this.pickClassName()}> {this.props.formatDate(this.getExpirationToShow())} </td>
-                <td>
+            <div className= 'userDrugContainer'>
+                <p> Name: {this.props.drug.drugName}</p>
+                <p className={this.pickClassName()}>Expiration Date: {this.props.formatDate(this.getExpirationToShow())} </p>
+                <div className='optionButtons'>
                     {this.checkIfOpenButton()}
                     <button onClick={this.onEdit}>edit</button>
                     <button onClick={this.onDeleted}>delete</button>
-                </td>
-            </tr>
+                </div>
+            </div>
         );
     }
 }

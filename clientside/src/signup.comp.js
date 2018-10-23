@@ -27,16 +27,15 @@ export class Signup extends React.Component {
     render() {
         return (
             <div id='signup-box'>
-                <h1>Sign up</h1>
-                
                 <div id='signup'>
+                    <h1>Sign up</h1>
                     <form onSubmit={this.handleSubmit}>
                         <input type="text" placeholder="Email adress" ref="email" />
                         <input type="text" placeholder="Your name" ref="userName" />
                         <input type="password" placeholder="Password (8-12 chars)" ref="password" />
                         <button type="submit" value="Submit"> Submit</button>
+                        <button onClick={this.props.returnHome}> cancel </button>
                     </form>
-                    <button onClick={this.props.returnHome}> cancel </button>
                 </div>
             </div>
         );

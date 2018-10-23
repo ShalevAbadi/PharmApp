@@ -2,6 +2,7 @@ import * as React from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import Select from 'react-select';
+import './style-sheets/addUserDrug/addUserDrug.css'
 
 export class UserDrugForm extends React.Component {
     constructor(props) {
@@ -64,10 +65,11 @@ export class UserDrugForm extends React.Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>
-                        Drug Name:
+            <div id='userDrugFormContainer'>
+                <div id='userDrugForm'>
+                    <h1>{this.props.header}</h1>
+                    <form onSubmit={this.handleSubmit}>
+                        <p>Drug Name:</p>
                          <Select
                             value={this.state.drugName}
                             placeholder={this.state.drugName}
@@ -79,25 +81,21 @@ export class UserDrugForm extends React.Component {
                                 return { value: drug.name, label: drug.name + ", expires " + drug.daysAfterOpened + " days after opening" };
                             })}
                         />
-                    </label>
-                    <br />
-                    <label>
+                        <br />
                         <div>
                             <p>Expiration Date:</p>
                             <DayPickerInput placeholder={this.props.formatDate(this.props.userDrug.closedExpirationDate)} onDayChange={(date) => { this.handleExpirationDateChange(date) }} />
                         </div>
-                    </label>
-                    <br />
-                    <label>
+                        <br />
                         Is Opened?
                         <input type="checkbox" name="isOpened" defaultChecked={this.state.isOpened} onClick={this.toggleOpen} />
-                    </label>
-                    <br />
-                    {this.showDateOpenedInput()}
-                    <br />
-                    <button type="submit" value="Submit"> Submit</button>
-                    <button onClick={this.props.returnHome}> cancel </button>
-                </form>
+                        <br />
+                        {this.showDateOpenedInput()}
+                        <p/>
+                        <button type="submit" value="Submit"> Submit</button>
+                        <button onClick={this.props.returnHome}> cancel </button>
+                    </form>
+                </div>
             </div>
         );
     };
