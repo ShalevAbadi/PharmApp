@@ -1,7 +1,9 @@
 import * as React from 'react';
 import './style-sheets/userDrugsList/userDrug.css';
+import expiredImage from './style-sheets/images/expired.jpg';
+
 export class UserDrugView extends React.Component {
-    
+
     getExpirationToShow = () => {
         return this.props.getExpirationToShow(this.props.drug);
     }
@@ -28,19 +30,24 @@ export class UserDrugView extends React.Component {
         return (this.getExpirationToShow() <= new Date())
     }
 
-    pickClassName = () => {
-        return (this.checkExpired() ? 'expired' : 'valid') ;
+    pickExipred = () => {
+        if (this.checkExpired()) {
+            return (
+                <img className= 'expired' src={expiredImage} alt='Expired' />
+            )
+        }
     }
 
     render() {
         return (
-            <div className= 'userDrugContainer'>
+            <div className='userDrugContainer'>
                 <p> Name: {this.props.drug.drugName}</p>
-                <p className={this.pickClassName()}>Expiration Date: {this.props.formatDate(this.getExpirationToShow())} </p>
+                <p>Expiration Date: {this.props.formatDate(this.getExpirationToShow())} </p>
                 <div className='optionButtons'>
                     {this.checkIfOpenButton()}
                     <button onClick={this.onEdit}>edit</button>
                     <button onClick={this.onDeleted}>delete</button>
+                    {this.pickExipred()}
                 </div>
             </div>
         );

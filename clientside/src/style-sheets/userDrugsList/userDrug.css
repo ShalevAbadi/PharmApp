@@ -1,5 +1,9 @@
 
 
 .expired {
-    background: rgb(255, 0, 0, 0.2  )
+    position: absolute;
+    right: 0;
+    background: rgb(255, 0, 0, 0.2  );
+    width: 100px; 
+    height: 40px;
 }
