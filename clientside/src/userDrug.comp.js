@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { UserDrugView } from './userDrugView.comp';
-import './style-sheets/userDrugsList/userDrugsTable.css';
-import './style-sheets/userDrugsList/userDrugsList.css'
+import './style-sheets/userDrugsList/userDrugs.css';
 
 export class UserDrugs extends React.Component {
 

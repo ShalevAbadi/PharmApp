@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './style-sheets/userDrugsList/userDrug.css';
 import expiredImage from './style-sheets/images/expired.jpg';
 
 export class UserDrugView extends React.Component {
@@ -33,7 +32,7 @@ export class UserDrugView extends React.Component {
     pickExipred = () => {
         if (this.checkExpired()) {
             return (
-                <img className= 'expired' src={expiredImage} alt='Expired' />
+                <img className='expired' src={expiredImage} alt='Expired' />
             )
         }
     }

@@ -1,0 +1,50 @@
+h1 {
+    font-weight: normal;
+    color: #0000;
+    text-shadow: 5px 5px 0 rgba(0, 0, 0);
+   
+  }
+  
+  #userDrugs{
+      margin: 5px;
+    }
+    #userDrugsContainer{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        grid-gap: 5px;
+    }
+    
+.drugListNavButtons{
+    margin: 0 auto;
+    position: relative;
+}
+
+.expired {
+    position: absolute;
+    right: 0;
+    background: rgb(255, 0, 0, 0.2  );
+    width: 200px; 
+    height: 40px;
+}
+
+.userDrugContainer {
+	position: relative;
+	margin-top: 5px;
+	width: 350px;
+	height: 120px;
+	padding: 10px;
+	border-style: double;
+	border-width: 3px;
+	border-color: #72a8ff;
+	background: #FFF;
+	border-radius: 2px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+  
+  #userDrug {
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-sizing: border-box;
+	width: 100%;
+  }
