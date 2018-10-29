@@ -7,6 +7,10 @@ export class UserDrugView extends React.Component {
         return this.props.getExpirationToShow(this.props.drug);
     }
 
+    formatExpiration = () => {
+        return this.props.formatDate(this.getExpirationToShow());
+    }
+
     checkIfOpenButton = () => {
         if (this.props.drug.isOpened === false) {
             return <button onClick={this.onOpened}>open</button>;
@@ -26,7 +30,8 @@ export class UserDrugView extends React.Component {
     }
 
     checkExpired = () => {
-        return (this.getExpirationToShow() <= new Date())
+        let today = new Date();
+        return this.getExpirationToShow() <= new Date()
     }
 
     pickExipred = () => {
@@ -41,7 +46,7 @@ export class UserDrugView extends React.Component {
         return (
             <div className='userDrugContainer'>
                 <p> Name: {this.props.drug.drugName}</p>
-                <p>Expiration Date: {this.props.formatDate(this.getExpirationToShow())} </p>
+                <p>Expiration Date: {this.formatExpiration()} </p>
                 <div className='optionButtons'>
                     {this.checkIfOpenButton()}
                     <button onClick={this.onEdit}>edit</button>

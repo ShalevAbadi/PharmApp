@@ -75,7 +75,7 @@ export class UserDrugForm extends React.Component {
                             placeholder={this.state.drugName}
                             onChange={this.handleNameChange}
                             options={this.props.drugsList.map((drug) => {
-                                if (drug.daysAfterOpened === Infinity) {
+                                if (drug.daysAfterOpened === null) {
                                     return { value: drug.name, label: drug.name }
                                 }
                                 return { value: drug.name, label: drug.name + ", expires " + drug.daysAfterOpened + " days after opening" };

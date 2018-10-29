@@ -45,11 +45,11 @@ router.post('/', checkAuth, (req, res, next) => {
         });
 });
 
-router.patch('/:userDrugId', checkAuth, userDrugAuth,(req, res, next) => {
+router.patch('/:userDrugId', checkAuth, userDrugAuth, (req, res, next) => {
     let userDrugId = req.params.userDrugId;
     let drugId = req.body.drugId;
-    let closedExpirationDate = req.body.closedExpirationDate;
-    let dateOpened = req.body.dateOpened;
+    let closedExpirationDate = new Date(req.body.closedExpirationDate).toLocaleDateString();
+    let dateOpened = new Date(req.body.dateOpened).toLocaleDateString();
     let isOpened = req.body.isOpened;
     let isDeleted = req.body.isDeleted;
     userDrugsHandler.updateUserDrug(userDrugId, drugId, closedExpirationDate, dateOpened, isOpened, isDeleted).then(

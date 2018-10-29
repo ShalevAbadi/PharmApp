@@ -156,8 +156,9 @@ class App extends Component {
       });
   }
 
+
   updateUserDrugDB = (userDrug) => {
-    userDrug = ({ ...userDrug, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: this.formatDate(userDrug.closedExpirationDate), dateOpened: this.formatDate(userDrug.dateOpened) });
+    userDrug = ({ ...userDrug, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: userDrug.closedExpirationDate, dateOpened: userDrug.dateOpened });
     axios.patch('http://localhost:3001/userDrugs/' + userDrug.id, userDrug, { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
       .then((response) => {
         this.getUserDrugs();
@@ -177,7 +178,7 @@ class App extends Component {
   }
 
   addUserDrug = (userDrug) => {
-    userDrug = ({ ...userDrug, userId: this.state.userId, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: this.formatDate(userDrug.closedExpirationDate), dateOpened: this.formatDate(userDrug.dateOpened) });
+    userDrug = ({ ...userDrug, userId: this.state.userId, drugId: this.getDrugIdByName(userDrug.drugName), closedExpirationDate: userDrug.closedExpirationDate, dateOpened: userDrug.dateOpened });
     this.setState({ page: '' });
     this.addUserDrugDB(userDrug);
   }
@@ -215,7 +216,8 @@ class App extends Component {
       return userDrug.closedExpirationDate;
     }
     if (userDrug.isOpened) {
-      let openedExpirationDate = new Date(userDrug.dateOpened + (86400000 * daysAfterOpened));
+      let dateOpened = new Date(userDrug.dateOpened);
+      let openedExpirationDate = new Date(dateOpened.getTime() + (86400000 * daysAfterOpened));
       return userDrug.closedExpirationDate <= openedExpirationDate ? userDrug.closedExpirationDate : openedExpirationDate;
     }
   }
@@ -274,10 +276,10 @@ class App extends Component {
 
   formatDate(date) {
     if (date) {
-      let year = date.getFullYear();
-      let month = date.getMonth();
-      let day = date.getDate();
-      return year + '-' + month + '-' + day
+      var d = date.getDate();
+      var m = date.getMonth() + 1;
+      var y = date.getFullYear();
+      return '' + y + '-' + m + '-' + d;
     }
   }
 
@@ -301,7 +303,7 @@ class App extends Component {
       return this.checkIfEditWindow();
     }
     return (
-      <UserDrugs logout={this.logout} changePage={this.changePage} formatDate={this.formatDate} userDrugsList={this.state.userDrugs} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
+      <UserDrugs logout={this.logout} changePage={this.changePage} userDrugsList={this.state.userDrugs} formatDate={this.formatDate} getExpirationToShow={this.getExpirationDateToShow} userDrugsEdit={this.state.userDrugs} toggleDrugEdit={this.onUserDrugEdit} drugEdited={this.updateUserDrug} drugOpened={this.onUserDrugOpened} drugDeleted={this.onUserDrugDeleted} drug={this.state.userDrugs[0]} />
     );
   }
 }
