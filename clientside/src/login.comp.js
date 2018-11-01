@@ -33,7 +33,7 @@ export class Login extends React.Component {
                         <input type="password" placeholder="Password" ref="password" />
                         <button type="submit" value="Submit"> Submit</button>
                     </form>
-                    <p onClick={this.onSignup}>not a user? signup</p>
+                    <p >not a user? <a href='#' onClick={this.onSignup} >signup </a></p>
                 </div>
             </div>
         );

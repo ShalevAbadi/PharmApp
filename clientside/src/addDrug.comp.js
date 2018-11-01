@@ -25,7 +25,6 @@ export class AddDrug extends React.Component {
         }
         let newDrug = { name: this.refs.name.value, daysAfterOpened: daysAfterOpened }
         event.preventDefault();
-        console.log(newDrug);
         return this.props.addDrug(newDrug);
     }
 
@@ -34,7 +33,7 @@ export class AddDrug extends React.Component {
     }
 
     showNameTaken = () => {
-        if (this.state.nameTaken === true) { return (<p id='name-taken'> name taken </p>) }
+        if (this.state.nameTaken === true) { return (<p id='name-taken'> Name taken </p>) }
     }
 
     render() {

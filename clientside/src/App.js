@@ -147,11 +147,16 @@ class App extends Component {
       });
   }
 
+  checkIfEmailExistDB = (email) => {
+    return axios.get('http://localhost:3001/user/signup/' + email);
+  }
+
   signupDB = (user) => {
     axios.post('http://localhost:3001/user/signup', user).then((response) => {
       this.login(user);
     })
       .catch(function (error) {
+        alert(error.response.data.message);
         console.log(error);
       });
   }
@@ -268,7 +273,7 @@ class App extends Component {
     })
     if (userDrugFound) {
       return (
-        <UserDrugEdit returnHome={this.returnHome} formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} userDrug={userDrugFound} />
+        <UserDrugEdit changePage={this.changePage} returnHome={this.returnHome} formatDate={this.formatDate} drugsList={this.state.drugs} drugEdited={this.updateUserDrug} userDrug={userDrugFound} />
       )
     }
     return
@@ -285,7 +290,7 @@ class App extends Component {
 
   render() {
     if (this.state.page === 'signup') {
-      return <Signup signup={this.signupDB} validateEmail={this.validateEmail} returnHome={this.returnHome} />
+      return <Signup signup={this.signupDB} checkIfEmailExist={this.checkIfEmailExistDB} validateEmail={this.validateEmail} returnHome={this.returnHome} />
     }
     if (localStorage.getItem('token') === '') {
       return <Login onSubmit={this.login} changePage={this.changePage} />
@@ -294,7 +299,7 @@ class App extends Component {
       return <div><p>Loading</p></div>
     }
     if (this.state.page === 'addUserDrug') {
-      return <AddUserDrug returnHome={this.returnHome} formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
+      return <AddUserDrug changePage={this.changePage} returnHome={this.returnHome} formatDate={this.formatDate} addUserDrug={this.addUserDrug} drugsList={this.state.drugs} />
     }
     if (this.state.page === 'addDrug') {
       return <AddDrug returnHome={this.returnHome} getDrugByName={this.getDrugByName} addDrug={this.addDrug} drugsList={this.state.drugs} />

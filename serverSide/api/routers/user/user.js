@@ -67,14 +67,14 @@ router.post('/signup', (req, res, next) => {
 
     )
     if (validateEmail(user.email === false)) {
-        res.status(404).json({
+        res.status(422).json({
             message: "Invalid email address"
         })
     }
     userHandler.createUserIfNotExist(user).then(
         (result) => {
             if (!result) {
-                res.status(404).json({
+                res.status(409).json({
                     message: 'User already exist'
                 });
             }
@@ -90,15 +90,15 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.get('/signup/:email', (req, res, next) => {
-    if (validateEmail(user.email === false)) {
-        res.status(404).json({
+    if (validateEmail(req.params.email) === false) {
+        res.status(422).json({
             message: "Invalid email address"
         })
     }
     userHandler.checkIfEmailExist(req.params.email).then(
         (result) => {
-            if (result) {
-                res.status(404).json({
+            if (result[0]) {
+                res.status(409).json({
                     message: 'Email alreay exist'
                 });
             }

@@ -22,7 +22,7 @@ export class UserDrugForm extends React.Component {
             return alert("Choose drug name");
         }
         if (!this.state.selectedExpirationDate) {
-            return alert("You didn't pick a date");
+            return alert("You didn't pick an expiration date");
         }
         let newUserDrug = { ...this.state.newUserDrug, drugName: this.state.drugName, closedExpirationDate: this.state.selectedExpirationDate, dateOpened: this.state.selectedDateOpened, isOpened: this.state.isOpened };
         if (newUserDrug.isOpened && (!this.state.selectedDateOpened)) {
@@ -70,7 +70,7 @@ export class UserDrugForm extends React.Component {
                     <h1>{this.props.header}</h1>
                     <form onSubmit={this.handleSubmit}>
                         <p>Drug Name:</p>
-                         <Select
+                        <Select
                             value={this.state.drugName}
                             placeholder={this.state.drugName}
                             onChange={this.handleNameChange}
@@ -82,6 +82,7 @@ export class UserDrugForm extends React.Component {
                             })}
                         />
                         <br />
+                        <p> Not in the list? <a href='#' onClick={() => this.props.changePage('addDrug')}> Create new drug</a> </p>
                         <div>
                             <p>Expiration Date:</p>
                             <DayPickerInput placeholder={this.props.formatDate(this.props.userDrug.closedExpirationDate)} onDayChange={(date) => { this.handleExpirationDateChange(date) }} />
@@ -91,7 +92,7 @@ export class UserDrugForm extends React.Component {
                         <input type="checkbox" name="isOpened" defaultChecked={this.state.isOpened} onClick={this.toggleOpen} />
                         <br />
                         {this.showDateOpenedInput()}
-                        <p/>
+                        <p />
                         <button type="submit" value="Submit"> Submit</button>
                         <button onClick={this.props.returnHome}> cancel </button>
                     </form>

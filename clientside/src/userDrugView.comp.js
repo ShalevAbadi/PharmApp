@@ -30,8 +30,7 @@ export class UserDrugView extends React.Component {
     }
 
     checkExpired = () => {
-        let today = new Date();
-        return this.getExpirationToShow() <= new Date()
+        return this.getExpirationToShow() <= new Date();
     }
 
     pickExipred = () => {

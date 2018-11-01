@@ -1,7 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
-*:focus {
-  outline: none;
-}
+
 
 body {
   margin: 0;
@@ -9,8 +6,11 @@ body {
   background: #c5e3f7;
   font-size: 16px;
   color: #222;
-  font-family: 'Roboto', sans-serif;
   font-weight: 300;
+}
+
+.email-error {
+  color: rgba(255, 0 ,0);
 }
 
 #signup-box {
