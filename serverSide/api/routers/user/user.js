@@ -6,8 +6,7 @@ const checkAuth = require('../../middleware/check-auth');
 const userHandlerReq = require('../../../classes/UserHandler');
 const userHandler = new userHandlerReq();
 const User = require('../../../classes/User');
-const signUp = require('./signUp');
-const login = require('./login');
+
 
 router.post('/validateLogin', checkAuth, (req, res, next) => {
     res.status(200).json({
@@ -21,7 +20,7 @@ router.post('/login', (req, res, next) => {
         null,
         null,
         req.body.password,
-        req.body.email
+        req.body.email.toLowerCase()
     );
     if (validateEmail(user.email) === false) {
         res.status(401).json({
@@ -63,7 +62,7 @@ router.post('/signup', (req, res, next) => {
         null,
         req.body.userName,
         req.body.password,
-        req.body.email
+        req.body.email.toLowerCase()
 
     )
     if (validateEmail(user.email === false)) {
@@ -90,12 +89,13 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.get('/signup/:email', (req, res, next) => {
-    if (validateEmail(req.params.email) === false) {
+    let email = req.param.email.toLowerCase();
+    if (validateEmail(email) === false) {
         res.status(422).json({
             message: "Invalid email address"
         })
     }
-    userHandler.checkIfEmailExist(req.params.email).then(
+    userHandler.checkIfEmailExist(email).then(
         (result) => {
             if (result[0]) {
                 res.status(409).json({
