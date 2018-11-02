@@ -89,7 +89,7 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.get('/signup/:email', (req, res, next) => {
-    let email = req.param.email.toLowerCase();
+    let email = req.params.email.toLowerCase();
     if (validateEmail(email) === false) {
         res.status(422).json({
             message: "Invalid email address"
