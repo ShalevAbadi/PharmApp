@@ -1,5 +1,5 @@
 {
-  "name": "abadipharm",
+  "name": "pharmApp",
   "version": "1.0.0",
   "description": "Pharmaceutical Management",
   "main": "./serverSide/routers/server.js",
@@ -15,6 +15,10 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "jsonwebtoken": "^8.3.0",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "promise": "^8.0.2",
+    "crypto": "^1.0.1"
   }
 }
