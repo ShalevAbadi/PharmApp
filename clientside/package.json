@@ -11,8 +11,10 @@
     "react-day-picker": "^7.2.1",
     "react-dom": "^16.4.2",
     "react-moment": "^0.8.2",
+    "react-script": "^2.0.5",
     "react-scripts": "1.1.4",
-    "react-select": "^2.0.0"
+    "react-select": "^2.0.0",
+    "start": "^5.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
