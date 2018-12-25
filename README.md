@@ -1,13 +1,13 @@
 # Pharm App
 
 
-In order to run the project, a local instance of mysql server with the correct tables is required.
+:warning: In order to run the project, a local instance of mysql server with the correct tables is required.
 
-Client + Server sides of a pharmaceutical management app for self learning purposes.
+Fullstack project of a pharmaceutical management app for self learning purposes.
 
-In this app you can add drugs to your list and follow their expiration date.
+This app allows you to register different drugs, track their expiration date and manage you storage.
 
-Self learning web project in order to learn:
+<span style="color:blue">Technologies:</span>
 
 * javascript 
 
@@ -17,7 +17,7 @@ Self learning web project in order to learn:
 
 * nodeJS
 
-During the project I learned to work with node modules such as:
+<span style="color:blue">Libraries:</span>
 
 * express
 
