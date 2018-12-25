@@ -1,7 +1,7 @@
 # Pharm App
 
 
-In order to run the project you need a local instance of mysql server with the right tables.
+In order to run the project, a local instance of mysql server with the correct tables is required.
 
 Client + Server sides of a pharmaceutical management app for self learning purposes.
 
