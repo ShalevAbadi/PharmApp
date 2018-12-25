@@ -7,7 +7,8 @@ Fullstack project of a pharmaceutical management app for self learning purposes.
 
 This app allows you to register different drugs, track their expiration date and manage you storage.
 
-Technologies:
+
+#### Technologies:
 
 * javascript 
 
@@ -17,7 +18,7 @@ Technologies:
 
 * nodeJS
 
-<span style="color:blue">Libraries:</span>
+#### Libraries:
 
 * express
 
