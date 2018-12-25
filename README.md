@@ -1,4 +1,4 @@
-#Pharm App
+# Pharm App
 
 
 In order to run the project you need a local instance of mysql server with the right tables.
@@ -9,18 +9,19 @@ In this app you can add drugs to your list and follow their expiration date.
 
 Self learning web project in order to learn:
 
-*javascript 
+* javascript 
 
-*sql 
+* sql 
 
-*reactJS 
+* reactJS 
 
-*nodeJS
+* nodeJS
 
 During the project I learned to work with node modules such as:
 
-*express
+* express
 
-*body-parser
+* body-parser
 
-*axios
+* axios
+ 
