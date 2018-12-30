@@ -25,4 +25,21 @@ This app allows you to register different drugs, track their expiration date and
 * body-parser
 
 * axios
- 
+
+* morgan
+
+* mysql
+
+* promise
+
+* crypto
+
+* jsonwebtoken
+
+* react-day-picker
+
+* moment
+
+* react-select
+
+
